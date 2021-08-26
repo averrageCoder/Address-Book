@@ -1,30 +1,43 @@
 package com.bridgelabz.addressbook;
 
+import java.util.Scanner;
+
 public class AddressBook {
 
 	public static void main(String[] args) {
 		
 		System.out.println("=== Welcome to Address Book Program ===");
 		
-		Contact contact = new Contact();
+		Scanner scan = new Scanner(System.in);
+		Contact contact[] = new Contact[10];
+		int i=0,choice;
 		
-		contact.setFirstName("Adam");
-		contact.setLastName("James");
-		contact.setAddress("India");
-		contact.setCity("Bangalore");
-		contact.setState("Karnataka");
-		contact.setZipCode("56100");
-		contact.setPhoneNumber("9876543210");
-		contact.setEmail("email@email.com");
+		do {
+			contact[i]=new Contact();
+			System.out.println("Enter First Name: ");
+			contact[i].setFirstName(scan.next());
+			System.out.println("Enter Last Name: ");
+			contact[i].setLastName(scan.next());
+			System.out.println("Enter City: ");
+			contact[i].setAddress(scan.next());
+			System.out.println("Enter State: ");
+			contact[i].setCity(scan.next());
+			System.out.println("Enter Address: ");
+			contact[i].setState(scan.next());
+			System.out.println("Enter zip code: ");
+			contact[i].setZipCode(scan.next());
+			System.out.println("Enter Phone number: ");
+			contact[i].setPhoneNumber(scan.next());
+			System.out.println("Enter Email: ");
+			contact[i].setEmail(scan.next());
 		
-		System.out.println("\nContact Details: ");
-		System.out.println("Name: "+contact.getName());
-		System.out.println("City: "+contact.getCity());
-		System.out.println("State: "+contact.getState());
-		System.out.println("Address: "+contact.getAddress());
-		System.out.println("ZipCode: "+contact.getZipCode());
-		System.out.println("Phone Number: "+contact.getPhoneNumber());
-		System.out.println("Email: "+contact.getEmail());
+			System.out.println(contact[i]);
+			
+			System.out.println("---Menu--- \n1. Add another \n0. Exit");
+			choice=scan.nextInt();
+			i++;
+			
+		}while(choice==1);
 	}
 
 }

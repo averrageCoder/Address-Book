@@ -70,4 +70,17 @@ public class Contact {
 	public String getEmail() {
 		return this.email;
 	}
+	
+	public String toString() {
+		
+		return "\nContact Details: "+"\n"
+		+"Name: "+this.getName()+"\n"
+		+"City: "+this.getCity()+"\n"
+		+"State: "+this.getState()+"\n"
+		+"Address: "+this.getAddress()+"\n"
+		+"ZipCode: "+this.getZipCode()+"\n"
+		+"Phone Number: "+this.getPhoneNumber()+"\n"
+		+"Email: "+this.getEmail()+"\n";
+		
+	}
 }
