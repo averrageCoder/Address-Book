@@ -14,7 +14,7 @@ public class AddressBook {
 		
 		int choice;
 		do {
-			System.out.println("\n---Main Menu--- \n1. ADD \n2. EDIT \n0. EXIT \n\nENTER CHOICE:");
+			System.out.println("\n---Main Menu--- \n1. ADD \n2. EDIT \n3. DELETE \n4. DISPLAY\n0. EXIT \n\nENTER CHOICE:");
 			choice = scan.nextInt();
 
 			switch(choice) {
@@ -25,6 +25,12 @@ public class AddressBook {
 			case 2: editContact();
 			break;
 			
+			case 3: deleteContact();
+			break;
+			
+			case 4: displayContacts();
+			break;
+			
 			case 0: System.exit(0);
 
 			default: System.out.println("Invalid choice!");
@@ -32,6 +38,49 @@ public class AddressBook {
 			}
 		
 		}while(choice!=0);
+	}
+
+	private static void displayContacts() {
+		
+		if(addressBook.size() < 1) {
+			System.out.println("No contacts in addressbook!");
+			return;
+		}
+		
+		Contact tempContact;
+		for (int i = 0; i < addressBook.size(); i++) {
+			tempContact=addressBook.get(i);
+			System.out.println("\n"+tempContact);
+		}
+		System.out.flush();
+	}
+
+	private static void deleteContact() {
+		
+		if(addressBook.size() < 1) {
+			System.out.println("No contacts in addressbook!");
+			return;
+		}
+		
+		String name;
+		int flag=-1;
+		System.out.println("Enter the first name of the person to delete: ");
+		name=scan.next();
+		Contact tempContact;
+		
+		for (int i = 0; i < addressBook.size(); i++) {
+			tempContact=addressBook.get(i);
+			if(name.equals(tempContact.getFirstName())) {
+				System.out.println("Name found! DELETING...");
+				addressBook.remove(i);
+				flag=0;
+				break;
+			}
+		}
+		
+		if(flag!=0)
+			System.out.println("Name not found!");
+		System.out.flush();
 	}
 
 	private static void editContact() {
@@ -53,13 +102,13 @@ public class AddressBook {
 				System.out.println("Name found! Enter new details: ");
 				Contact contact = createNewContact();
 				addressBook.set(i, contact);
-				
 				System.out.println("Contact added successfully!");
 				flag=0;
+				break;
 			}
 		}
 		
-		if(flag!=-1)
+		if(flag==0)
 			System.out.println("Name not found!");
 		System.out.flush();
 	}
