@@ -5,7 +5,8 @@ import java.util.Scanner;
 
 public class AddressBook {
 	
-	static ArrayList <Contact> addressBook = new ArrayList<Contact>();
+	static Contact addressBook[] = new Contact[10];
+	static int total_contacts=0;
 	static Scanner scan = new Scanner(System.in);
 
 	public static void main(String[] args) {
@@ -42,14 +43,14 @@ public class AddressBook {
 
 	private static void displayContacts() {
 		
-		if(addressBook.size() < 1) {
+		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
 			return;
 		}
 		
 		Contact tempContact;
-		for (int i = 0; i < addressBook.size(); i++) {
-			tempContact=addressBook.get(i);
+		for (int i = 0; i < total_contacts; i++) {
+			tempContact=addressBook[i];
 			System.out.println("\n"+tempContact);
 		}
 		System.out.flush();
@@ -57,7 +58,7 @@ public class AddressBook {
 
 	private static void deleteContact() {
 		
-		if(addressBook.size() < 1) {
+		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
 			return;
 		}
@@ -68,11 +69,14 @@ public class AddressBook {
 		name=scan.next();
 		Contact tempContact;
 		
-		for (int i = 0; i < addressBook.size(); i++) {
-			tempContact=addressBook.get(i);
+		for (int i = 0; i < total_contacts; i++) {
+			tempContact=addressBook[i];
 			if(name.equals(tempContact.getFirstName())) {
 				System.out.println("Name found! DELETING...");
-				addressBook.remove(i);
+				for(int j=i+1; j<total_contacts;j++) {
+					addressBook[j-1]=addressBook[j];
+				}
+				total_contacts--;
 				flag=0;
 				break;
 			}
@@ -85,7 +89,7 @@ public class AddressBook {
 
 	private static void editContact() {
 		
-		if(addressBook.size() < 1) {
+		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
 			return;
 		}
@@ -96,12 +100,12 @@ public class AddressBook {
 		name=scan.next();
 		Contact tempContact;
 		
-		for (int i = 0; i < addressBook.size(); i++) {
-			tempContact=addressBook.get(i);
+		for (int i = 0; i < total_contacts; i++) {
+			tempContact=addressBook[i];
 			if(name.equals(tempContact.getFirstName())) {
 				System.out.println("Name found! Enter new details: ");
 				Contact contact = createNewContact();
-				addressBook.set(i, contact);
+				addressBook[i] = contact;
 				System.out.println("Contact added successfully!");
 				flag=0;
 				break;
@@ -115,7 +119,9 @@ public class AddressBook {
 
 	private static void addContact() {
 			Contact contact = createNewContact();
-			addressBook.add(contact);
+			//addressBook.add(contact);
+			addressBook[total_contacts] = contact;
+			total_contacts++;
 			
 		}
 
