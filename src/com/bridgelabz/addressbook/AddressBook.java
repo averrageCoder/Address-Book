@@ -1,21 +1,28 @@
 package com.bridgelabz.addressbook;
 
-import java.util.ArrayList;
+//import java.util.ArrayList;
 import java.util.Scanner;
 
 public class AddressBook {
 	
+	private String addressBookName;
 	static Contact addressBook[] = new Contact[10];
 	static int total_contacts=0;
 	static Scanner scan = new Scanner(System.in);
+	
+	public void setAddressBookName(String addressBookName) {
+		this.addressBookName = addressBookName;
+	}
+	
+	public String getAddressBookName() {
+		return this.addressBookName;
+	}
 
-	public static void main(String[] args) {
-		
-		System.out.println("=== Welcome to Address Book Program ===");
+	public static void manageAddressBook() {
 		
 		int choice;
 		do {
-			System.out.println("\n---Main Menu--- \n1. ADD \n2. EDIT \n3. DELETE \n4. DISPLAY\n0. EXIT \n\nENTER CHOICE:");
+			System.out.println("\n---ADDRESS BOOK - Menu--- \n1. ADD \n2. EDIT \n3. DELETE \n4. DISPLAY\n0. CHANGE ADDRESS BOOK \n\nENTER CHOICE:");
 			choice = scan.nextInt();
 
 			switch(choice) {
@@ -32,7 +39,7 @@ public class AddressBook {
 			case 4: displayContacts();
 			break;
 			
-			case 0: System.exit(0);
+			case 0: break;
 
 			default: System.out.println("Invalid choice!");
 		
@@ -112,7 +119,7 @@ public class AddressBook {
 			}
 		}
 		
-		if(flag==0)
+		if(flag!=0)
 			System.out.println("Name not found!");
 		System.out.flush();
 	}
@@ -146,6 +153,14 @@ public class AddressBook {
 	
 		System.out.println(contact);
 		return contact;
+	}
+	
+	public String toString() {
+		
+		return "\nAddressBook Details: "+"\n"
+		+"Name: "+this.getAddressBookName()+"\n"
+		+"Total Contacts: "+this.total_contacts+"\n";
+		
 	}
 
 }
