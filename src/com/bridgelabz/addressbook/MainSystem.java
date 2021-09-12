@@ -14,7 +14,7 @@ public class MainSystem {
 		
 		int choice;
 		do {
-			System.out.println("\n---SYSTEM - Menu--- \n1. ADD \n2. EDIT \n3. MANAGE \n4. DELETE \n5. DISPLAY\n0. EXIT \n\nENTER CHOICE:");
+			System.out.println("\n---SYSTEM - Menu--- \n1. ADD \n2. EDIT \n3. MANAGE \n4. DELETE \n5. DISPLAY\n6. SEARCH PERSON & CITY\n0. EXIT \n\nENTER CHOICE:");
 			choice = scan.nextInt();
 
 			switch(choice) {
@@ -34,6 +34,9 @@ public class MainSystem {
 			case 5: displayAddressBook();
 			break;
 			
+			case 6: searchPersonCity();
+			break;
+			
 			case 0: System.exit(0);
 
 			default: System.out.println("Invalid choice!");
@@ -44,6 +47,27 @@ public class MainSystem {
 
 	}
 	
+	private static void searchPersonCity() {
+		
+		if(total_addressBooks < 1) {
+			System.out.println("No contacts in addressbook!");
+			return;
+		}
+		
+		String person, city;
+		System.out.println("Enter the name of the person: ");
+		person=scan.next();
+		System.out.println("Enter the name of the city: ");
+		city=scan.next();
+		AddressBook tempAddressBook;
+		System.out.println("ADDRESSBOOK\tFOUND_COUNT");
+		for (int i = 0; i < total_addressBooks; i++) {
+			tempAddressBook=addressBooks[i];
+			System.out.println(tempAddressBook.getAddressBookName()+":\t"+tempAddressBook.searchPersonCity(person, city));
+		}
+		
+	}
+
 	private static void editAddressBook() {
 		if(total_addressBooks < 1) {
 			System.out.println("No contacts in addressbook!");
@@ -148,6 +172,7 @@ public class MainSystem {
 				flag=0;
 				break;
 			}
+			addressBooks[i]=tempAddressBook;
 		}
 		
 		if(flag!=0)
