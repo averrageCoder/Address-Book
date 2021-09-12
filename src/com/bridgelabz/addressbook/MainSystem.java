@@ -14,7 +14,7 @@ public class MainSystem {
 		
 		int choice;
 		do {
-			System.out.println("\n---SYSTEM - Menu--- \n1. ADD \n2. EDIT \n3. MANAGE \n4. DELETE \n5. DISPLAY\n0. CHANGE ADDRESS BOOK \n\nENTER CHOICE:");
+			System.out.println("\n---SYSTEM - Menu--- \n1. ADD \n2. EDIT \n3. MANAGE \n4. DELETE \n5. DISPLAY\n0. EXIT \n\nENTER CHOICE:");
 			choice = scan.nextInt();
 
 			switch(choice) {
