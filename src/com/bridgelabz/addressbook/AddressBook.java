@@ -8,10 +8,10 @@ import java.util.Set;
 public class AddressBook {
 	
 	private String addressBookName;
-	static Contact addressBook[] = new Contact[10];
-	private static Set<String> nameSet = new LinkedHashSet<>();
-	static int total_contacts=0;
-	static Scanner scan = new Scanner(System.in);
+	private Contact addressBook[] = new Contact[10];
+	private Set<String> nameSet = new LinkedHashSet<>();
+	int total_contacts=0;
+	Scanner scan = new Scanner(System.in);
 	
 	public void setAddressBookName(String addressBookName) {
 		this.addressBookName = addressBookName;
@@ -21,7 +21,7 @@ public class AddressBook {
 		return this.addressBookName;
 	}
 
-	public static void manageAddressBook() {
+	public void manageAddressBook() {
 		
 		int choice;
 		do {
@@ -51,7 +51,7 @@ public class AddressBook {
 		}while(choice!=0);
 	}
 
-	private static void displayContacts() {
+	private void displayContacts() {
 		
 		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
@@ -66,7 +66,7 @@ public class AddressBook {
 		System.out.flush();
 	}
 
-	private static void deleteContact() {
+	private void deleteContact() {
 		
 		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
@@ -97,7 +97,7 @@ public class AddressBook {
 		System.out.flush();
 	}
 
-	private static void editContact() {
+	private void editContact() {
 		
 		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
@@ -132,20 +132,20 @@ public class AddressBook {
 		System.out.flush();
 	}
 
-	private static void addContact() {
+	private void addContact() {
 			Contact contact = createNewContact();
 			//addressBook.add(contact);
 			if(contact==null) {
 				System.out.println("Name already exists!");
 			}
 			else {
-				addressBook[total_contacts] = contact;
-				total_contacts++;
+				this.addressBook[total_contacts] = contact;
+				this.total_contacts++;
 			}
 			
 		}
 
-	private static Contact createNewContact() {
+	private Contact createNewContact() {
 		Contact contact=new Contact();
 		System.out.println("Enter First Name: ");
 		String firstName = scan.next();
@@ -155,11 +155,11 @@ public class AddressBook {
 			return null;
 		contact.setFirstName(firstName);
 		contact.setLastName(lastName);
-		System.out.println("Enter City: ");
-		contact.setAddress(scan.next());
-		System.out.println("Enter State: ");
-		contact.setCity(scan.next());
 		System.out.println("Enter Address: ");
+		contact.setAddress(scan.next());
+		System.out.println("Enter City: ");
+		contact.setCity(scan.next());
+		System.out.println("Enter State: ");
 		contact.setState(scan.next());
 		System.out.println("Enter zip code: ");
 		contact.setZipCode(scan.next());
@@ -177,6 +177,21 @@ public class AddressBook {
 		return "\nAddressBook Details: "+"\n"
 		+"Name: "+this.getAddressBookName()+"\n"
 		+"Total Contacts: "+this.total_contacts+"\n";
+		
+	}
+
+	public int searchPersonCity(String person, String city) {
+		
+		Contact tempContact;
+		int foundCount=0;
+		for (int i = 0; i < total_contacts; i++) {
+			tempContact=addressBook[i];
+			if(tempContact.getFirstName().equals(person) && tempContact.getCity().equals(city)) {
+				//System.out.println(tempContact);
+				foundCount++;
+			}
+		}
+		return foundCount;
 		
 	}
 
