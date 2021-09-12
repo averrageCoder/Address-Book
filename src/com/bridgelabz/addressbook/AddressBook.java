@@ -233,5 +233,16 @@ public class AddressBook {
 		    System.out.println("City: "+entry.getKey() + " Person: " + entry.getValue());
 		}
 	}
+	
+	public void getCityAndStateCount() {
+		System.out.println("By City: ");
+		for (Entry<String, ArrayList<String>> entry : this.cityPersonMapping.entrySet()) {
+		    System.out.println("City: "+entry.getKey() + " Count: " + entry.getValue().size());
+		}
+		System.out.println("By State: ");
+		for (Entry<String, ArrayList<String>> entry : this.statePersonMapping.entrySet()) {
+		    System.out.println("City: "+entry.getKey() + " Count: " + entry.getValue().size());
+		}
+	}
 
 }
