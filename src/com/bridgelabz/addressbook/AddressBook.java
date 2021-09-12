@@ -1,12 +1,15 @@
 package com.bridgelabz.addressbook;
 
+import java.util.LinkedHashSet;
 //import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.Set;
 
 public class AddressBook {
 	
 	private String addressBookName;
 	static Contact addressBook[] = new Contact[10];
+	private static Set<String> nameSet = new LinkedHashSet<>();
 	static int total_contacts=0;
 	static Scanner scan = new Scanner(System.in);
 	
@@ -112,10 +115,15 @@ public class AddressBook {
 			if(name.equals(tempContact.getFirstName())) {
 				System.out.println("Name found! Enter new details: ");
 				Contact contact = createNewContact();
-				addressBook[i] = contact;
-				System.out.println("Contact added successfully!");
-				flag=0;
-				break;
+				if(contact==null) {
+					System.out.println("Name already exists!");
+				}
+				else {
+					addressBook[i] = contact;
+					System.out.println("Contact added successfully!");
+					flag=0;
+					break;
+				}
 			}
 		}
 		
@@ -127,17 +135,26 @@ public class AddressBook {
 	private static void addContact() {
 			Contact contact = createNewContact();
 			//addressBook.add(contact);
-			addressBook[total_contacts] = contact;
-			total_contacts++;
+			if(contact==null) {
+				System.out.println("Name already exists!");
+			}
+			else {
+				addressBook[total_contacts] = contact;
+				total_contacts++;
+			}
 			
 		}
 
 	private static Contact createNewContact() {
 		Contact contact=new Contact();
 		System.out.println("Enter First Name: ");
-		contact.setFirstName(scan.next());
+		String firstName = scan.next();
 		System.out.println("Enter Last Name: ");
-		contact.setLastName(scan.next());
+		String lastName = scan.next();
+		if(!nameSet.add(firstName+' '+lastName))
+			return null;
+		contact.setFirstName(firstName);
+		contact.setLastName(lastName);
 		System.out.println("Enter City: ");
 		contact.setAddress(scan.next());
 		System.out.println("Enter State: ");
