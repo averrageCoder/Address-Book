@@ -1,6 +1,10 @@
 package com.bridgelabz.addressbook;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Map.Entry;
 //import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
@@ -10,6 +14,8 @@ public class AddressBook {
 	private String addressBookName;
 	private Contact addressBook[] = new Contact[10];
 	private Set<String> nameSet = new LinkedHashSet<>();
+	private HashMap<String,ArrayList<String>> cityPersonMapping=new HashMap<>();
+	private HashMap<String,ArrayList<String>> statePersonMapping=new HashMap<>();
 	int total_contacts=0;
 	Scanner scan = new Scanner(System.in);
 	
@@ -25,7 +31,7 @@ public class AddressBook {
 		
 		int choice;
 		do {
-			System.out.println("\n---ADDRESS BOOK - Menu--- \n1. ADD \n2. EDIT \n3. DELETE \n4. DISPLAY\n0. CHANGE ADDRESS BOOK \n\nENTER CHOICE:");
+			System.out.println("\n---ADDRESS BOOK - Menu--- \n1. ADD CONTACT \n2. EDIT CONTACT \n3. DELETE CONTACT \n4. DISPLAY CONTACT \n0. EXIT ADDRESS BOOK (GO BACK) \n\nENTER CHOICE:");
 			choice = scan.nextInt();
 
 			switch(choice) {
@@ -167,7 +173,29 @@ public class AddressBook {
 		contact.setPhoneNumber(scan.next());
 		System.out.println("Enter Email: ");
 		contact.setEmail(scan.next());
-	
+		
+		if(this.cityPersonMapping.containsKey(contact.getCity())) {
+			ArrayList<String> tempArray = this.cityPersonMapping.get(contact.getCity());
+			tempArray.add(firstName);
+			this.cityPersonMapping.replace(contact.getCity(), tempArray);
+		}
+		else {
+			ArrayList<String> tempArray = new ArrayList<>();
+			tempArray.add(firstName);
+			this.cityPersonMapping.put(contact.getCity(), tempArray);
+		}
+		
+		if(this.statePersonMapping.containsKey(contact.getState())) {
+			ArrayList<String> tempArray = this.statePersonMapping.get(contact.getState());
+			tempArray.add(firstName);
+			this.statePersonMapping.replace(contact.getState(), tempArray);
+		}
+		else {
+			ArrayList<String> tempArray = new ArrayList<>();
+			tempArray.add(firstName);
+			this.statePersonMapping.put(contact.getState(), tempArray);
+		}
+		
 		System.out.println(contact);
 		return contact;
 	}
@@ -193,6 +221,17 @@ public class AddressBook {
 		}
 		return foundCount;
 		
+	}
+
+	public void viewPersonByCityAndState() {
+		System.out.println("By City: ");
+		for (Entry<String, ArrayList<String>> entry : this.cityPersonMapping.entrySet()) {
+		    System.out.println("City: "+entry.getKey() + " Person: " + entry.getValue());
+		}
+		System.out.println("By State: ");
+		for (Entry<String, ArrayList<String>> entry : this.statePersonMapping.entrySet()) {
+		    System.out.println("City: "+entry.getKey() + " Person: " + entry.getValue());
+		}
 	}
 
 }
