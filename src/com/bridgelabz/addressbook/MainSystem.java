@@ -14,7 +14,7 @@ public class MainSystem {
 		
 		int choice;
 		do {
-			System.out.println("\n---SYSTEM - Menu--- \n1. ADD ADDRESSBOOK \n2. EDIT ADDRESSBOOK \n3. MANAGE ADDRESSBOOK \n4. DELETE ADDRESSBOOK \n5. DISPLAY\n6. SEARCH PERSON & CITY\n7. VIEW PERSON BY CITY & STATE\n0. EXIT \n\nENTER CHOICE:");
+			System.out.println("\n---SYSTEM - Menu--- \n1. ADD ADDRESSBOOK \n2. EDIT ADDRESSBOOK \n3. MANAGE ADDRESSBOOK \n4. DELETE ADDRESSBOOK \n5. DISPLAY\n6. SEARCH PERSON & CITY\n7. VIEW PERSON BY CITY & STATE\n8. GET CITY AND STATE COUNT \n0. EXIT \n\nENTER CHOICE:");
 			choice = scan.nextInt();
 
 			switch(choice) {
@@ -40,6 +40,9 @@ public class MainSystem {
 			case 7: viewPersonCityState();
 			break;
 			
+			case 8: getCityAndStateCount();
+			break;
+			
 			case 0: System.exit(0);
 
 			default: System.out.println("Invalid choice!");
@@ -50,6 +53,27 @@ public class MainSystem {
 
 	}
 	
+	private static void getCityAndStateCount() {
+		
+		if(total_addressBooks < 1) {
+			System.out.println("No contacts in addressbook!");
+			return;
+		}
+		
+		AddressBook tempAddressBook;
+		for (int i = 0; i < total_addressBooks; i++) {
+			tempAddressBook=addressBooks[i];
+			if(tempAddressBook.total_contacts > 0) {
+				System.out.println("\nAddressbook- "+tempAddressBook.getAddressBookName()+": ");
+				tempAddressBook.getCityAndStateCount();
+			}
+			else {
+				System.out.println("\nAddressbook- "+tempAddressBook.getAddressBookName()+": No contacts");
+			}
+		}
+		
+	}
+
 	private static void viewPersonCityState() {
 		
 		if(total_addressBooks < 1) {
@@ -61,14 +85,13 @@ public class MainSystem {
 		for (int i = 0; i < total_addressBooks; i++) {
 			tempAddressBook=addressBooks[i];
 			if(tempAddressBook.total_contacts > 0) {
-				System.out.println("Addressbook- "+tempAddressBook.getAddressBookName()+": ");
+				System.out.println("\nAddressbook- "+tempAddressBook.getAddressBookName()+": ");
 				tempAddressBook.viewPersonByCityAndState();
 			}
 			else {
-				System.out.println("Addressbook- "+tempAddressBook.getAddressBookName()+": No contacts");
+				System.out.println("\nAddressbook- "+tempAddressBook.getAddressBookName()+": No contacts");
 			}
 		}
-		
 	}
 
 	private static void searchPersonCity() {
