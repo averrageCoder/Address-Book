@@ -223,25 +223,29 @@ public class AddressBook {
 		
 	}
 
-	public void viewPersonByCityAndState() {
+	public void viewPersonByCityAndState(String city, String state) {
 		System.out.println("By City: ");
 		for (Entry<String, ArrayList<String>> entry : this.cityPersonMapping.entrySet()) {
-		    System.out.println("City: "+entry.getKey() + " Person: " + entry.getValue());
+			if(entry.getKey().equals(city))
+				System.out.println("City: "+entry.getKey() + " Person: " + entry.getValue());
 		}
 		System.out.println("By State: ");
 		for (Entry<String, ArrayList<String>> entry : this.statePersonMapping.entrySet()) {
-		    System.out.println("City: "+entry.getKey() + " Person: " + entry.getValue());
+			if(entry.getKey().equals(state))
+				System.out.println("State: "+entry.getKey() + " Person: " + entry.getValue());
 		}
 	}
 	
-	public void getCityAndStateCount() {
+	public void getCityAndStateCount(String city, String state) {
 		System.out.println("By City: ");
 		for (Entry<String, ArrayList<String>> entry : this.cityPersonMapping.entrySet()) {
-		    System.out.println("City: "+entry.getKey() + " Count: " + entry.getValue().size());
+			if(entry.getKey().equals(city))
+				System.out.println("City: "+entry.getKey() + " Count: " + entry.getValue().size());
 		}
 		System.out.println("By State: ");
 		for (Entry<String, ArrayList<String>> entry : this.statePersonMapping.entrySet()) {
-		    System.out.println("City: "+entry.getKey() + " Count: " + entry.getValue().size());
+			if(entry.getKey().equals(state))
+				System.out.println("State: "+entry.getKey() + " Count: " + entry.getValue().size());
 		}
 	}
 
