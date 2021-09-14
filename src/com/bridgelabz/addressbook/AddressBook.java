@@ -261,5 +261,26 @@ public class AddressBook {
 				.collect(Collectors.toCollection(ArrayList::new));
 		this.addressBook = sortedAddressBook;
 	}
+	
+	public void sortAddressBookByCity() {
+		ArrayList<Contact> sortedAddressBook = this.addressBook.stream()
+				.sorted(Comparator.comparing(Contact::getCity))
+				.collect(Collectors.toCollection(ArrayList::new));
+		this.addressBook = sortedAddressBook;
+	}
+	
+	public void sortAddressBookByState() {
+		ArrayList<Contact> sortedAddressBook = this.addressBook.stream()
+				.sorted(Comparator.comparing(Contact::getState))
+				.collect(Collectors.toCollection(ArrayList::new));
+		this.addressBook = sortedAddressBook;
+	}
+	
+	public void sortAddressBookByZip() {
+		ArrayList<Contact> sortedAddressBook = this.addressBook.stream()
+				.sorted(Comparator.comparing(Contact::getZipCode))
+				.collect(Collectors.toCollection(ArrayList::new));
+		this.addressBook = sortedAddressBook;
+	}
 
 }
