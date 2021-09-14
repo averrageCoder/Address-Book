@@ -4,18 +4,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Map.Entry;	
 //import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
 
+import com.sun.tools.javac.util.List;
+
 public class AddressBook {
 	
 	private String addressBookName;
-	private Contact addressBook[] = new Contact[10];
+	//private Contact addressBook[] = new Contact[10];
+	private ArrayList<Contact> addressBook = new ArrayList<Contact>();
 	private Set<String> nameSet = new LinkedHashSet<>();
-	private HashMap<String,ArrayList<String>> cityPersonMapping=new HashMap<>();
-	private HashMap<String,ArrayList<String>> statePersonMapping=new HashMap<>();
+	private HashMap<String,ArrayList<Contact>> cityPersonMapping=new HashMap<>();
+	private HashMap<String,ArrayList<Contact>> statePersonMapping=new HashMap<>();
 	int total_contacts=0;
 	Scanner scan = new Scanner(System.in);
 	
@@ -63,10 +66,8 @@ public class AddressBook {
 			System.out.println("No contacts in addressbook!");
 			return;
 		}
-		
-		Contact tempContact;
-		for (int i = 0; i < total_contacts; i++) {
-			tempContact=addressBook[i];
+
+		for(Contact tempContact : addressBook) {
 			System.out.println("\n"+tempContact);
 		}
 		System.out.flush();
@@ -81,17 +82,15 @@ public class AddressBook {
 		
 		String name;
 		int flag=-1;
-		System.out.println("Enter the first name of the person to delete: ");
+		System.out.println("Enter the name of the person to delete: ");
 		name=scan.next();
 		Contact tempContact;
 		
-		for (int i = 0; i < total_contacts; i++) {
-			tempContact=addressBook[i];
-			if(name.equals(tempContact.getFirstName())) {
+		for (int i = 0; i < addressBook.size(); i++) {
+			tempContact=addressBook.get(i);
+			if(name.equals(tempContact.getName())) {
 				System.out.println("Name found! DELETING...");
-				for(int j=i+1; j<total_contacts;j++) {
-					addressBook[j-1]=addressBook[j];
-				}
+				addressBook.remove(i);
 				total_contacts--;
 				flag=0;
 				break;
@@ -112,20 +111,21 @@ public class AddressBook {
 		
 		String name;
 		int flag=-1;
-		System.out.println("Enter the first name of the person to edit: ");
+		System.out.println("Enter the name of the person to edit: ");
 		name=scan.next();
 		Contact tempContact;
 		
-		for (int i = 0; i < total_contacts; i++) {
-			tempContact=addressBook[i];
-			if(name.equals(tempContact.getFirstName())) {
+		for (int i = 0; i < addressBook.size(); i++) {
+			tempContact=addressBook.get(i);
+			if(name.equals(tempContact.getName())) {
 				System.out.println("Name found! Enter new details: ");
 				Contact contact = createNewContact();
 				if(contact==null) {
 					System.out.println("Name already exists!");
 				}
 				else {
-					addressBook[i] = contact;
+					addressBook.set(i, contact);
+					nameSet.remove(tempContact.getName());
 					System.out.println("Contact added successfully!");
 					flag=0;
 					break;
@@ -145,7 +145,7 @@ public class AddressBook {
 				System.out.println("Name already exists!");
 			}
 			else {
-				this.addressBook[total_contacts] = contact;
+				this.addressBook.add(contact);
 				this.total_contacts++;
 			}
 			
@@ -175,24 +175,24 @@ public class AddressBook {
 		contact.setEmail(scan.next());
 		
 		if(this.cityPersonMapping.containsKey(contact.getCity())) {
-			ArrayList<String> tempArray = this.cityPersonMapping.get(contact.getCity());
-			tempArray.add(firstName);
+			ArrayList<Contact> tempArray = this.cityPersonMapping.get(contact.getCity());
+			tempArray.add(contact);
 			this.cityPersonMapping.replace(contact.getCity(), tempArray);
 		}
 		else {
-			ArrayList<String> tempArray = new ArrayList<>();
-			tempArray.add(firstName);
+			ArrayList<Contact> tempArray = new ArrayList<>();
+			tempArray.add(contact);
 			this.cityPersonMapping.put(contact.getCity(), tempArray);
 		}
 		
 		if(this.statePersonMapping.containsKey(contact.getState())) {
-			ArrayList<String> tempArray = this.statePersonMapping.get(contact.getState());
-			tempArray.add(firstName);
+			ArrayList<Contact> tempArray = this.statePersonMapping.get(contact.getState());
+			tempArray.add(contact);
 			this.statePersonMapping.replace(contact.getState(), tempArray);
 		}
 		else {
-			ArrayList<String> tempArray = new ArrayList<>();
-			tempArray.add(firstName);
+			ArrayList<Contact> tempArray = new ArrayList<>();
+			tempArray.add(contact);
 			this.statePersonMapping.put(contact.getState(), tempArray);
 		}
 		
@@ -211,26 +211,23 @@ public class AddressBook {
 	public int searchPersonCity(String person, String city) {
 		
 		Contact tempContact;
-		int foundCount=0;
-		for (int i = 0; i < total_contacts; i++) {
-			tempContact=addressBook[i];
-			if(tempContact.getFirstName().equals(person) && tempContact.getCity().equals(city)) {
-				//System.out.println(tempContact);
-				foundCount++;
+		ArrayList<Contact> tempArray = new ArrayList<>();
+		addressBook.stream().forEach(contact -> {
+			if(contact.getName().equals(person) && contact.getCity().equals(city)) {
+				tempArray.add(contact);
 			}
-		}
-		return foundCount;
-		
+		});
+		return tempArray.size();
 	}
 
 	public void viewPersonByCityAndState(String city, String state) {
 		System.out.println("By City: ");
-		for (Entry<String, ArrayList<String>> entry : this.cityPersonMapping.entrySet()) {
+		for (Entry<String, ArrayList<Contact>> entry : this.cityPersonMapping.entrySet()) {
 			if(entry.getKey().equals(city))
 				System.out.println("City: "+entry.getKey() + " Person: " + entry.getValue());
 		}
 		System.out.println("By State: ");
-		for (Entry<String, ArrayList<String>> entry : this.statePersonMapping.entrySet()) {
+		for (Entry<String, ArrayList<Contact>> entry : this.statePersonMapping.entrySet()) {
 			if(entry.getKey().equals(state))
 				System.out.println("State: "+entry.getKey() + " Person: " + entry.getValue());
 		}
@@ -238,12 +235,12 @@ public class AddressBook {
 	
 	public void getCityAndStateCount(String city, String state) {
 		System.out.println("By City: ");
-		for (Entry<String, ArrayList<String>> entry : this.cityPersonMapping.entrySet()) {
+		for (Entry<String, ArrayList<Contact>> entry : this.cityPersonMapping.entrySet()) {
 			if(entry.getKey().equals(city))
 				System.out.println("City: "+entry.getKey() + " Count: " + entry.getValue().size());
 		}
 		System.out.println("By State: ");
-		for (Entry<String, ArrayList<String>> entry : this.statePersonMapping.entrySet()) {
+		for (Entry<String, ArrayList<Contact>> entry : this.statePersonMapping.entrySet()) {
 			if(entry.getKey().equals(state))
 				System.out.println("State: "+entry.getKey() + " Count: " + entry.getValue().size());
 		}
