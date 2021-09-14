@@ -239,15 +239,16 @@ public class AddressBook {
 	
 	public void getCityAndStateCount(String city, String state) {
 		System.out.println("By City: ");
-		for (Entry<String, ArrayList<Contact>> entry : this.cityPersonMapping.entrySet()) {
-			if(entry.getKey().equals(city))
-				System.out.println("City: "+entry.getKey() + " Count: " + entry.getValue().size());
-		}
+	this.cityPersonMapping.entrySet()
+        .stream()
+        .filter(e -> e.getKey()==city)
+        .peek(e -> System.out.println("City: "+e.getKey()+" Count: "+e.getValue().stream().count()));
+		
 		System.out.println("By State: ");
-		for (Entry<String, ArrayList<Contact>> entry : this.statePersonMapping.entrySet()) {
-			if(entry.getKey().equals(state))
-				System.out.println("State: "+entry.getKey() + " Count: " + entry.getValue().size());
-		}
+		this.statePersonMapping.entrySet()
+        .stream()
+        .filter(e -> e.getKey()==state)
+        .peek(e -> System.out.println("State: "+e.getKey()+" Count: "+e.getValue().stream().count()));
 	}
 
 }
