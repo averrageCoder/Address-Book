@@ -1,6 +1,7 @@
 package com.bridgelabz.addressbook;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
@@ -95,6 +96,7 @@ public class AddressBook {
 				addressBook.remove(i);
 				total_contacts--;
 				flag=0;
+				sortAddressBookByName();
 				break;
 			}
 		}
@@ -128,6 +130,7 @@ public class AddressBook {
 				else {
 					addressBook.set(i, contact);
 					nameSet.remove(tempContact.getName());
+					sortAddressBookByName();
 					System.out.println("Contact added successfully!");
 					flag=0;
 					break;
@@ -149,6 +152,7 @@ public class AddressBook {
 			else {
 				this.addressBook.add(contact);
 				this.total_contacts++;
+				sortAddressBookByName();
 			}
 			
 		}
@@ -239,7 +243,7 @@ public class AddressBook {
 	
 	public void getCityAndStateCount(String city, String state) {
 		System.out.println("By City: ");
-	this.cityPersonMapping.entrySet()
+		this.cityPersonMapping.entrySet()
         .stream()
         .filter(e -> e.getKey()==city)
         .peek(e -> System.out.println("City: "+e.getKey()+" Count: "+e.getValue().stream().count()));
@@ -249,6 +253,13 @@ public class AddressBook {
         .stream()
         .filter(e -> e.getKey()==state)
         .peek(e -> System.out.println("State: "+e.getKey()+" Count: "+e.getValue().stream().count()));
+	}
+	
+	public void sortAddressBookByName() {
+		ArrayList<Contact> sortedAddressBook = this.addressBook.stream()
+				.sorted(Comparator.comparing(Contact::getName))
+				.collect(Collectors.toCollection(ArrayList::new));
+		this.addressBook = sortedAddressBook;
 	}
 
 }
