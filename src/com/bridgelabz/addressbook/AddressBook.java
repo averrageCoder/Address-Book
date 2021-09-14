@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 //import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import com.sun.tools.javac.util.List;
 
@@ -222,15 +224,17 @@ public class AddressBook {
 
 	public void viewPersonByCityAndState(String city, String state) {
 		System.out.println("By City: ");
-		for (Entry<String, ArrayList<Contact>> entry : this.cityPersonMapping.entrySet()) {
-			if(entry.getKey().equals(city))
-				System.out.println("City: "+entry.getKey() + " Person: " + entry.getValue());
-		}
+		this.cityPersonMapping.entrySet()
+                .stream()
+                .filter(e -> e.getKey()==city)
+                .peek(e -> System.out.println("City: "+e.getKey()+" Person: "+e.getValue()));
+		
+		
 		System.out.println("By State: ");
-		for (Entry<String, ArrayList<Contact>> entry : this.statePersonMapping.entrySet()) {
-			if(entry.getKey().equals(state))
-				System.out.println("State: "+entry.getKey() + " Person: " + entry.getValue());
-		}
+		this.statePersonMapping.entrySet()
+        .stream()
+        .filter(e -> e.getKey()==state)
+        .peek(e -> System.out.println("State: "+e.getKey()+" Person: "+e.getValue()));
 	}
 	
 	public void getCityAndStateCount(String city, String state) {
