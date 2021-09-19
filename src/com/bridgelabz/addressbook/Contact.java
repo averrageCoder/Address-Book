@@ -74,17 +74,12 @@ public class Contact {
 	public String getEmail() {
 		return this.email;
 	}
-	
+
+	@Override
 	public String toString() {
-		
-		return "\nContact Details: "+"\n"
-		+"Name: "+this.getName()+"\n"
-		+"City: "+this.getCity()+"\n"
-		+"State: "+this.getState()+"\n"
-		+"Address: "+this.getAddress()+"\n"
-		+"ZipCode: "+this.getZipCode()+"\n"
-		+"Phone Number: "+this.getPhoneNumber()+"\n"
-		+"Email: "+this.getEmail()+"\n";
-		
+		return "firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", city=" + city
+				+ ", state=" + state + ", zipCode=" + zipCode + ", phoneNumber=" + phoneNumber + ", email=" + email;
 	}
+	
+	
 }
