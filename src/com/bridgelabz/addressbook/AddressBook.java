@@ -1,24 +1,22 @@
 package com.bridgelabz.addressbook;
 
 import java.util.ArrayList;
+
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Map.Entry;	
+import java.util.List;
 //import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import com.sun.tools.javac.util.List;
 
 public class AddressBook {
 	
 	private String addressBookName;
 	//private Contact addressBook[] = new Contact[10];
-	private ArrayList<Contact> addressBook = new ArrayList<Contact>();
+	private List<Contact> addressBook = new ArrayList<Contact>();
 	private Set<String> nameSet = new LinkedHashSet<>();
 	private HashMap<String,ArrayList<Contact>> cityPersonMapping=new HashMap<>();
 	private HashMap<String,ArrayList<Contact>> statePersonMapping=new HashMap<>();
@@ -37,7 +35,7 @@ public class AddressBook {
 		
 		int choice;
 		do {
-			System.out.println("\n---ADDRESS BOOK - Menu--- \n1. ADD CONTACT \n2. EDIT CONTACT \n3. DELETE CONTACT \n4. DISPLAY CONTACT \n0. EXIT ADDRESS BOOK (GO BACK) \n\nENTER CHOICE:");
+			System.out.println("\n---ADDRESS BOOK - Menu--- \n1. ADD CONTACT \n2. EDIT CONTACT \n3. DELETE CONTACT \n4. DISPLAY CONTACT \n5. WRITE TO FILE \n6. READ FROM FILE \n0. EXIT ADDRESS BOOK (GO BACK) \n\nENTER CHOICE:");
 			choice = scan.nextInt();
 
 			switch(choice) {
@@ -52,6 +50,12 @@ public class AddressBook {
 			break;
 			
 			case 4: displayContacts();
+			break;
+			
+			case 5: writeAddressBookData();
+			break;
+			
+			case 6: readAddressBookData();
 			break;
 			
 			case 0: break;
@@ -215,8 +219,6 @@ public class AddressBook {
 	}
 
 	public int searchPersonCity(String person, String city) {
-		
-		Contact tempContact;
 		ArrayList<Contact> tempArray = new ArrayList<>();
 		addressBook.stream().forEach(contact -> {
 			if(contact.getName().equals(person) && contact.getCity().equals(city)) {
@@ -281,6 +283,18 @@ public class AddressBook {
 				.sorted(Comparator.comparing(Contact::getZipCode))
 				.collect(Collectors.toCollection(ArrayList::new));
 		this.addressBook = sortedAddressBook;
+	}
+	
+	void writeAddressBookData() {
+		String filename = this.addressBookName+".txt";
+		new AddressBookFileIO().writeData(addressBook, filename);
+	}
+	
+	public long readAddressBookData() {
+		String filename = this.addressBookName+".txt";
+		this.addressBook=new AddressBookFileIO().readAddressBookData(filename);
+		this.total_contacts = this.addressBook.size();
+		return this.addressBook.size();
 	}
 
 }
