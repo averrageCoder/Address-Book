@@ -1,5 +1,6 @@
 package com.bridgelabz.addressbook;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 import java.util.Comparator;
@@ -11,8 +12,13 @@ import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
-public class AddressBook {
+
+public class AddressBookImpl implements AddressBookService{
+	
+	public enum IOService { FILE_IO, CSV_IO, JSON_IO, REST_I0, CONSOLE_IO};
 	
 	private String addressBookName;
 	//private Contact addressBook[] = new Contact[10];
@@ -31,11 +37,11 @@ public class AddressBook {
 		return this.addressBookName;
 	}
 
-	public void manageAddressBook() {
+	public void manageAddressBook() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
 		
 		int choice;
 		do {
-			System.out.println("\n---ADDRESS BOOK - Menu--- \n1. ADD CONTACT \n2. EDIT CONTACT \n3. DELETE CONTACT \n4. DISPLAY CONTACT \n5. WRITE TO FILE \n6. READ FROM FILE \n0. EXIT ADDRESS BOOK (GO BACK) \n\nENTER CHOICE:");
+			System.out.println("\n---ADDRESS BOOK - Menu--- \n1. ADD CONTACT \n2. EDIT CONTACT \n3. DELETE CONTACT \n4. DISPLAY CONTACT \n5. WRITE TO FILE \n6. READ FROM FILE \n7. WRITE TO CSV \n8. READ FROM CSV \n0. EXIT ADDRESS BOOK (GO BACK) \n\nENTER CHOICE:");
 			choice = scan.nextInt();
 
 			switch(choice) {
@@ -49,13 +55,19 @@ public class AddressBook {
 			case 3: deleteContact();
 			break;
 			
-			case 4: displayContacts();
+			case 4: writeAddressBookData(IOService.CONSOLE_IO);
 			break;
 			
-			case 5: writeAddressBookData();
+			case 5: writeAddressBookData(IOService.FILE_IO);
 			break;
 			
-			case 6: readAddressBookData();
+			case 6: readAddressBookData(IOService.FILE_IO);
+			break;
+			
+			case 7: writeAddressBookData(IOService.CSV_IO);
+			break;
+			
+			case 8: readAddressBookData(IOService.CSV_IO);
 			break;
 			
 			case 0: break;
@@ -67,20 +79,7 @@ public class AddressBook {
 		}while(choice!=0);
 	}
 
-	private void displayContacts() {
-		
-		if(total_contacts < 1) {
-			System.out.println("No contacts in addressbook!");
-			return;
-		}
-
-		for(Contact tempContact : addressBook) {
-			System.out.println("\n"+tempContact);
-		}
-		System.out.flush();
-	}
-
-	private void deleteContact() {
+	public void deleteContact() {
 		
 		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
@@ -110,7 +109,7 @@ public class AddressBook {
 		System.out.flush();
 	}
 
-	private void editContact() {
+	public void editContact() {
 		
 		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
@@ -147,7 +146,7 @@ public class AddressBook {
 		System.out.flush();
 	}
 
-	private void addContact() {
+	public void addContact() {
 			Contact contact = createNewContact();
 			//addressBook.add(contact);
 			if(contact==null) {
@@ -161,7 +160,7 @@ public class AddressBook {
 			
 		}
 
-	private Contact createNewContact() {
+	public Contact createNewContact() {
 		Contact contact=new Contact();
 		System.out.println("Enter First Name: ");
 		String firstName = scan.next();
@@ -285,16 +284,42 @@ public class AddressBook {
 		this.addressBook = sortedAddressBook;
 	}
 	
-	void writeAddressBookData() {
-		String filename = this.addressBookName+".txt";
-		new AddressBookFileIO().writeData(addressBook, filename);
+	public void writeAddressBookData(IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
+		if(ioservice.equals(IOService.FILE_IO)) {
+			String filename = this.addressBookName+".txt";
+			new AddressBookFileIO().writeData(addressBook, filename);
+		}
+		else if(ioservice.equals(IOService.CSV_IO)) {
+			String filename = this.addressBookName+".csv";
+			new AddressBookCSVIO().writeData(addressBook, filename);
+		}
+		else if(ioservice.equals(IOService.CONSOLE_IO)) {
+			if(total_contacts < 1) {
+				System.out.println("No contacts in addressbook!");
+				return;
+			}
+
+			for(Contact tempContact : addressBook) {
+				System.out.println("\n"+tempContact);
+			}
+			System.out.flush();
+		}
 	}
 	
-	public long readAddressBookData() {
-		String filename = this.addressBookName+".txt";
-		this.addressBook=new AddressBookFileIO().readAddressBookData(filename);
-		this.total_contacts = this.addressBook.size();
-		return this.addressBook.size();
+	public long readAddressBookData(IOService ioservice) {
+		if(ioservice.equals(IOService.FILE_IO)) {
+			String filename = this.addressBookName+".txt";
+			this.addressBook=new AddressBookFileIO().readAddressBookData(filename);
+			this.total_contacts = this.addressBook.size();
+			return this.addressBook.size();
+		}
+		else if(ioservice.equals(IOService.CSV_IO)) {
+			String filename = this.addressBookName+".txt";
+			this.addressBook=new AddressBookCSVIO().readAddressBookData(filename);
+			this.total_contacts = this.addressBook.size();
+			return this.addressBook.size();
+		}
+		return 0;
 	}
 
 }

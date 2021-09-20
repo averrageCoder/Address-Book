@@ -1,14 +1,18 @@
 package com.bridgelabz.addressbook;
 
+import java.io.IOException;
 import java.util.Scanner;
+
+import com.opencsv.exceptions.CsvDataTypeMismatchException;
+import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public class SystemClass {
 	
-	static AddressBook addressBooks[] = new AddressBook[10];
+	static AddressBookImpl addressBooks[] = new AddressBookImpl[10];
 	static int total_addressBooks=0;
 	static Scanner scan = new Scanner(System.in);
 	
-	public static void manageSystem() {
+	public static void manageSystem() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
 		
 		System.out.println("=== Welcome to Address Book Program ===");
 		
@@ -66,7 +70,7 @@ public class SystemClass {
 		System.out.println("Enter the name of the state: ");
 		String state=scan.next();
 		
-		AddressBook tempAddressBook;
+		AddressBookImpl tempAddressBook;
 		for (int i = 0; i < total_addressBooks; i++) {
 			tempAddressBook=addressBooks[i];
 			if(tempAddressBook.total_contacts > 0) {
@@ -93,7 +97,7 @@ public class SystemClass {
 		System.out.println("Enter the name of the state: ");
 		String state=scan.next();
 		
-		AddressBook tempAddressBook;
+		AddressBookImpl tempAddressBook;
 		for (int i = 0; i < total_addressBooks; i++) {
 			tempAddressBook=addressBooks[i];
 			if(tempAddressBook.total_contacts > 0) {
@@ -118,7 +122,7 @@ public class SystemClass {
 		person=scan.next();
 		System.out.println("Enter the name of the city: ");
 		city=scan.next();
-		AddressBook tempAddressBook;
+		AddressBookImpl tempAddressBook;
 		System.out.println("ADDRESSBOOK\tFOUND_COUNT");
 		for (int i = 0; i < total_addressBooks; i++) {
 			tempAddressBook=addressBooks[i];
@@ -137,13 +141,13 @@ public class SystemClass {
 		int flag=-1;
 		System.out.println("Enter the name of the addressBook to edit: ");
 		name=scan.next();
-		AddressBook tempAddressBook;
+		AddressBookImpl tempAddressBook;
 		
 		for (int i = 0; i < total_addressBooks; i++) {
 			tempAddressBook=addressBooks[i];
 			if(name.equals(tempAddressBook.getAddressBookName())) {
 				System.out.println("AddressBook found! Enter new details: ");
-				AddressBook addressBook = createNewAddressBook();
+				AddressBookImpl addressBook = createNewAddressBook();
 				addressBooks[i] = addressBook;
 				System.out.println("AddressBook edited successfully!");
 				flag=0;
@@ -156,8 +160,8 @@ public class SystemClass {
 		System.out.flush();
 	}
 
-	private static AddressBook createNewAddressBook() {
-		AddressBook addressBook =new AddressBook();
+	private static AddressBookImpl createNewAddressBook() {
+		AddressBookImpl addressBook =new AddressBookImpl();
 		System.out.println("Enter Name of Address Book: ");
 		addressBook.setAddressBookName(scan.next());
 		System.out.println(addressBook);
@@ -170,7 +174,7 @@ public class SystemClass {
 			return;
 		}
 		
-		AddressBook tempAddressBook;
+		AddressBookImpl tempAddressBook;
 		for (int i = 0; i < total_addressBooks; i++) {
 			tempAddressBook=addressBooks[i];
 			System.out.println("\n"+tempAddressBook);
@@ -189,7 +193,7 @@ public class SystemClass {
 		int flag=-1;
 		System.out.println("Enter the name of the addressBook to edit: ");
 		name=scan.next();
-		AddressBook tempAddressBook;
+		AddressBookImpl tempAddressBook;
 		
 		for (int i = 0; i < total_addressBooks; i++) {
 			tempAddressBook=addressBooks[i];
@@ -210,7 +214,7 @@ public class SystemClass {
 		
 	}
 
-	private static void manageAddressBook() {
+	private static void manageAddressBook() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
 		
 		if(total_addressBooks < 1) {
 			System.out.println("No addressbook in system!");
@@ -221,7 +225,7 @@ public class SystemClass {
 		int flag=-1;
 		System.out.println("Enter the name of the addressBook to edit: ");
 		name=scan.next();
-		AddressBook tempAddressBook;
+		AddressBookImpl tempAddressBook;
 		
 		for (int i = 0; i < total_addressBooks; i++) {
 			tempAddressBook=addressBooks[i];
@@ -241,7 +245,7 @@ public class SystemClass {
 	}
 
 	private static void addAddressBook() {
-		AddressBook addressBook = createNewAddressBook();
+		AddressBookImpl addressBook = createNewAddressBook();
 		//addressBook.add(contact);
 		addressBooks[total_addressBooks] = addressBook;
 		total_addressBooks++;
