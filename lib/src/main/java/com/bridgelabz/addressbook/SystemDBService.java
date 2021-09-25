@@ -12,7 +12,7 @@ import java.util.List;
 public class SystemDBService {
 	
 	private Connection getConnection() throws SQLException {
-		String jdbcUrl = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false&characterEncoding=utf8";
+		String jdbcUrl = "jdbc:mysql://localhost:3306/addressBook_system?useSSL=false&characterEncoding=utf8";
 		String userName = "root";
 		String password ="";
 		Connection connection;
