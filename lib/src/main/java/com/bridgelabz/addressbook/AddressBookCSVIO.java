@@ -21,7 +21,7 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 public class AddressBookCSVIO {
 
 	@SuppressWarnings("unchecked")
-	public void writeData(List<Contact> addressBook, String filename) throws IOException, CsvDataTypeMismatchException, CsvRequiredFieldEmptyException {
+	public void writeData(List<Contact> addressBook, String filename){
 		try (
 			Writer writer = Files.newBufferedWriter(Paths.get(filename));
 		) {
@@ -30,6 +30,12 @@ public class AddressBookCSVIO {
 					.build();
 			
 			beanToCsv.write(addressBook);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (CsvDataTypeMismatchException e) {
+			e.printStackTrace();
+		} catch (CsvRequiredFieldEmptyException e) {
+			e.printStackTrace();
 		}
 		
 	}

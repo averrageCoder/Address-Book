@@ -2,18 +2,16 @@ package com.bridgelabz.addressbook;
 
 import java.io.IOException;
 import java.util.ArrayList;
-
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
 //import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import com.opencsv.exceptions.CsvDataTypeMismatchException;
-import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 
 public class AddressBookImpl implements AddressBookService{
@@ -21,13 +19,11 @@ public class AddressBookImpl implements AddressBookService{
 	public enum IOService { FILE_IO, CSV_IO, JSON_IO, REST_I0, CONSOLE_IO};
 	
 	private String addressBookName;
-	//private Contact addressBook[] = new Contact[10];
-	private List<Contact> addressBook = new ArrayList<Contact>();
+	private List<Contact> addressBook = new ArrayList<Contact>(Arrays.asList());
 	private Set<String> nameSet = new LinkedHashSet<>();
 	private HashMap<String,ArrayList<Contact>> cityPersonMapping=new HashMap<>();
 	private HashMap<String,ArrayList<Contact>> statePersonMapping=new HashMap<>();
 	int total_contacts=0;
-	Scanner scan = new Scanner(System.in);
 	
 	public void setAddressBookName(String addressBookName) {
 		this.addressBookName = addressBookName;
@@ -37,102 +33,42 @@ public class AddressBookImpl implements AddressBookService{
 		return this.addressBookName;
 	}
 
-	public void manageAddressBook() throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
-		
-		int choice;
-		do {
-			System.out.println("\n---ADDRESS BOOK - Menu--- \n1. ADD CONTACT \n2. EDIT CONTACT \n3. DELETE CONTACT \n4. DISPLAY CONTACT \n5. WRITE TO FILE \n6. READ FROM FILE \n7. WRITE TO CSV \n8. READ FROM CSV  \n9. WRITE TO JSON \n10. READ FROM JSON \n0. EXIT ADDRESS BOOK (GO BACK) \n\nENTER CHOICE:");
-			choice = scan.nextInt();
-
-			switch(choice) {
-
-			case 1: addContact();
-			break;
-
-			case 2: editContact();
-			break;
-			
-			case 3: deleteContact();
-			break;
-			
-			case 4: writeAddressBookData(IOService.CONSOLE_IO);
-			break;
-			
-			case 5: writeAddressBookData(IOService.FILE_IO);
-			break;
-			
-			case 6: readAddressBookData(IOService.FILE_IO);
-			break;
-			
-			case 7: writeAddressBookData(IOService.CSV_IO);
-			break;
-			
-			case 8: readAddressBookData(IOService.CSV_IO);
-			break;
-			
-			case 9: writeAddressBookData(IOService.JSON_IO);
-			break;
-			
-			case 10: readAddressBookData(IOService.JSON_IO);
-			break;
-			
-			case 0: break;
-
-			default: System.out.println("Invalid choice!");
-		
-			}
-		
-		}while(choice!=0);
-	}
-
-	public void deleteContact() {
-		
+	public void deleteContact(String name) {;
 		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
 			return;
 		}
-		
-		String name;
 		int flag=-1;
-		System.out.println("Enter the name of the person to delete: ");
-		name=scan.next();
 		Contact tempContact;
-		
+		LinkedList<Contact> tempAddressBook = addressBook.stream().collect(Collectors.toCollection(LinkedList::new));
 		for (int i = 0; i < addressBook.size(); i++) {
 			tempContact=addressBook.get(i);
 			if(name.equals(tempContact.getName())) {
 				System.out.println("Name found! DELETING...");
-				addressBook.remove(i);
+				tempAddressBook.remove(i);
 				total_contacts--;
 				flag=0;
 				sortAddressBookByName();
 				break;
 			}
 		}
-		
+		this.addressBook = tempAddressBook.stream().collect(Collectors.toCollection(ArrayList::new));
 		if(flag!=0)
 			System.out.println("Name not found!");
-		System.out.flush();
 	}
 
-	public void editContact() {
-		
+	public void editContact(String name, Contact contact) {
 		if(total_contacts < 1) {
 			System.out.println("No contacts in addressbook!");
 			return;
 		}
-		
-		String name;
 		int flag=-1;
-		System.out.println("Enter the name of the person to edit: ");
-		name=scan.next();
 		Contact tempContact;
-		
 		for (int i = 0; i < addressBook.size(); i++) {
 			tempContact=addressBook.get(i);
 			if(name.equals(tempContact.getName())) {
 				System.out.println("Name found! Enter new details: ");
-				Contact contact = createNewContact();
+				contact = checkNewContact(contact);
 				if(contact==null) {
 					System.out.println("Name already exists!");
 				}
@@ -146,15 +82,12 @@ public class AddressBookImpl implements AddressBookService{
 				}
 			}
 		}
-		
 		if(flag!=0)
 			System.out.println("Name not found!");
-		System.out.flush();
 	}
 
-	public void addContact() {
-			Contact contact = createNewContact();
-			//addressBook.add(contact);
+	public void addContact(Contact contact) {
+			contact = checkNewContact(contact);
 			if(contact==null) {
 				System.out.println("Name already exists!");
 			}
@@ -163,31 +96,11 @@ public class AddressBookImpl implements AddressBookService{
 				this.total_contacts++;
 				sortAddressBookByName();
 			}
-			
 		}
 
-	public Contact createNewContact() {
-		Contact contact=new Contact();
-		System.out.println("Enter First Name: ");
-		String firstName = scan.next();
-		System.out.println("Enter Last Name: ");
-		String lastName = scan.next();
-		if(!nameSet.add(firstName+' '+lastName))
+	public Contact checkNewContact(Contact contact) {
+		if(!nameSet.add(contact.getFirstName()+' '+contact.getLastName()))
 			return null;
-		contact.setFirstName(firstName);
-		contact.setLastName(lastName);
-		System.out.println("Enter Address: ");
-		contact.setAddress(scan.next());
-		System.out.println("Enter City: ");
-		contact.setCity(scan.next());
-		System.out.println("Enter State: ");
-		contact.setState(scan.next());
-		System.out.println("Enter zip code: ");
-		contact.setZipCode(scan.next());
-		System.out.println("Enter Phone number: ");
-		contact.setPhoneNumber(scan.next());
-		System.out.println("Enter Email: ");
-		contact.setEmail(scan.next());
 		
 		if(this.cityPersonMapping.containsKey(contact.getCity())) {
 			ArrayList<Contact> tempArray = this.cityPersonMapping.get(contact.getCity());
@@ -215,12 +128,10 @@ public class AddressBookImpl implements AddressBookService{
 		return contact;
 	}
 	
-	public String toString() {
-		
+	public String toString() {	
 		return "\nAddressBook Details: "+"\n"
 		+"Name: "+this.getAddressBookName()+"\n"
 		+"Total Contacts: "+this.total_contacts+"\n";
-		
 	}
 
 	public int searchPersonCity(String person, String city) {
@@ -290,7 +201,7 @@ public class AddressBookImpl implements AddressBookService{
 		this.addressBook = sortedAddressBook;
 	}
 	
-	public void writeAddressBookData(IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException {
+	public void writeAddressBookData(IOService ioservice) {
 		if(ioservice.equals(IOService.FILE_IO)) {
 			String filename = this.addressBookName+".txt";
 			new AddressBookFileIO().writeData(addressBook, filename);
@@ -308,7 +219,6 @@ public class AddressBookImpl implements AddressBookService{
 				System.out.println("No contacts in addressbook!");
 				return;
 			}
-
 			for(Contact tempContact : addressBook) {
 				System.out.println("\n"+tempContact);
 			}
@@ -337,5 +247,4 @@ public class AddressBookImpl implements AddressBookService{
 		}
 		return 0;
 	}
-
 }

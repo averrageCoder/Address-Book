@@ -27,6 +27,22 @@ public class Contact {
 	@CsvBindByName(column = "EMAIL")
 	private String email;
 	
+	public Contact(String firstName, String lastName, String address, String city, String state, String zipCode,
+			String phoneNumber, String email) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.address = address;
+		this.city = city;
+		this.state = state;
+		this.zipCode = zipCode;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+	}
+	
+	public Contact() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
@@ -39,6 +55,10 @@ public class Contact {
 		this.lastName = lastName;
 	}
 	
+	public String getLastName() {
+		return this.lastName;
+	}
+
 	public String getName() {
 		return this.firstName+" "+this.lastName;
 	}

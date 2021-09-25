@@ -8,12 +8,13 @@ import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public interface AddressBookService {
 	
+	int total_contacts = 0;
 	public String getAddressBookName();
 	public void setAddressBookName(String addressBookName);
-	public void deleteContact();
-	public void editContact();
-	public void addContact();
-	public Contact createNewContact();
+	public void deleteContact(String name);
+	public void editContact(String name, Contact contact);
+	public void addContact(Contact contact);
+	public Contact checkNewContact(Contact contact);
 	public int searchPersonCity(String person, String city);
 	public void viewPersonByCityAndState(String city, String state);
 	public void getCityAndStateCount(String city, String state);
@@ -23,5 +24,4 @@ public interface AddressBookService {
 	public void sortAddressBookByZip();
 	void writeAddressBookData(IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException;
 	public long readAddressBookData(IOService ioservice);
-
 }
