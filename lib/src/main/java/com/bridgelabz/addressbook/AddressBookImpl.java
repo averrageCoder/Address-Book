@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class AddressBookImpl implements AddressBookService{
 	
-	public enum IOService { FILE_IO, CSV_IO, JSON_IO, REST_I0, CONSOLE_IO};
+	public enum IOService { FILE_IO, CSV_IO, JSON_IO, REST_I0, CONSOLE_IO, DB_IO};
 	
 	private String addressBookName;
 	private List<Contact> addressBook = new ArrayList<Contact>(Arrays.asList());
@@ -25,6 +25,14 @@ public class AddressBookImpl implements AddressBookService{
 	private HashMap<String,ArrayList<Contact>> statePersonMapping=new HashMap<>();
 	int total_contacts=0;
 	
+	public AddressBookImpl(String name) {
+		this.addressBookName = name;
+	}
+
+	public AddressBookImpl() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public void setAddressBookName(String addressBookName) {
 		this.addressBookName = addressBookName;
 	}
@@ -242,6 +250,11 @@ public class AddressBookImpl implements AddressBookService{
 		else if(ioservice.equals(IOService.JSON_IO)) {
 			String filename = this.addressBookName+".json";
 			this.addressBook=new AddressBookJSONIO().readAddressBookData(filename);
+			this.total_contacts = this.addressBook.size();
+			return this.addressBook.size();
+		}
+		else if(ioservice.equals(IOService.DB_IO)) {
+			this.addressBook=new AddressBookDBIO().readAddressBookData();
 			this.total_contacts = this.addressBook.size();
 			return this.addressBook.size();
 		}

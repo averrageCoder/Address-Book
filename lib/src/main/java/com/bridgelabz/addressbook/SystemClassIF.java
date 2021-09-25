@@ -16,6 +16,7 @@ public interface SystemClassIF {
 	public void displayAddressBook();
 	public void deleteAddressBook(String addressBookName);
 	public void addAddressBook(String addressBookName);
+	public int readAddressBookData(IOService ioservice);
 	
 	public void addContactToAddressBook(String addressBookName, Contact contact);
 	public void editContactToAddressBook(String addressBookName, String person, Contact contact);
@@ -24,5 +25,5 @@ public interface SystemClassIF {
 	public void viewPersonByCityAndStateInAddressBook(String addressBookName, String city, String state);
 	public void getCityAndStateCountInAddressBook(String addressBookName, String city, String state);
 	public void writeAddressBookDataInAddressBook(String addressBookName, IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException;
-	public void readAddressBookDataInAddressBook(String addressBookName, IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException;
+	public long readAddressBookDataInAddressBook(String addressBookName, IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException;
 }
