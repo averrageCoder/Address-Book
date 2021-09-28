@@ -1,6 +1,7 @@
 package com.bridgelabz.addressbook;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
 
@@ -17,4 +18,9 @@ public class AddressBookTest {
 		assertEquals(2, 2);
 	}
 	
+	@Test
+	public void givenEmployeePayrollInDB_whenUpdatedShouldMatchDB() {
+		SystemClassIF systemClass = new SystemClassImpl();
+		assertTrue(systemClass.updateAddressBookData("James","7894561230"));
+	}
 }
