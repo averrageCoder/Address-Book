@@ -26,4 +26,5 @@ public interface SystemClassIF {
 	public void getCityAndStateCountInAddressBook(String addressBookName, String city, String state);
 	public void writeAddressBookDataInAddressBook(String addressBookName, IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException;
 	public long readAddressBookDataInAddressBook(String addressBookName, IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException;
+	public boolean updateAddressBookData(String first_name, String phone_number);
 }

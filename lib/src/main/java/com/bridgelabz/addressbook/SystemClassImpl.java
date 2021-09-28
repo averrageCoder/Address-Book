@@ -320,4 +320,11 @@ public class SystemClassImpl implements SystemClassIF {
 			System.out.println("AddressBook not found!");
 		return returnedSize;
 	}
+
+	@Override
+	public boolean updateAddressBookData(String first_name, String phone_number) {
+		int result = (new SystemDBService()).updateEmployeeUsingPreparedStatement(first_name,phone_number);
+		if (result==0) return false;
+		return true;
+	}
 }
