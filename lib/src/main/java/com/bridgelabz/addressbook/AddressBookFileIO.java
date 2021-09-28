@@ -36,7 +36,7 @@ public class AddressBookFileIO {
 							Contact tempAddressBook = new Contact();
 							tempAddressBook.setFirstName(line.split(",")[0].split("=")[1]);
 							tempAddressBook.setLastName(line.split(",")[1].split("=")[1]);
-							tempAddressBook.setAddress(line.split(",")[2].split("=")[1]);
+							//tempAddressBook.setAddress(line.split(",")[2].split("=")[1]);
 							tempAddressBook.setCity(line.split(",")[3].split("=")[1]);
 							tempAddressBook.setState(line.split(",")[4].split("=")[1]);
 							tempAddressBook.setZipCode(line.split(",")[5].split("=")[1]);

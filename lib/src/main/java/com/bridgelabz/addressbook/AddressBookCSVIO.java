@@ -52,7 +52,7 @@ public class AddressBookCSVIO {
 					Contact tempContact	= new Contact();
 					tempContact.setFirstName( record[0]);
 					tempContact.setLastName(record[1]);
-					tempContact.setAddress(record[2]);
+					//tempContact.setAddress(record[2]);
 					tempContact.setCity(record[3]);
 					tempContact.setState(record[4]);
 					tempContact.setZipCode(record[5]);
