@@ -139,7 +139,7 @@ public class SystemClassImpl implements SystemClassIF {
 			this.addressBooks =new SystemDBService().readAddressBookData();
 			this.total_addressBooks = this.addressBooks.size();
 			System.out.println("PARSED DATA FROM DB: ");
-			this.addressBooks.forEach(employee -> System.out.println(employee));
+			this.addressBooks.forEach(addressBook -> System.out.println(addressBook));
 		}
 		return this.total_addressBooks;
 	}

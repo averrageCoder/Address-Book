@@ -136,10 +136,23 @@ public class AddressBookImpl implements AddressBookService{
 		return contact;
 	}
 	
-	public String toString() {	
-		return "\nAddressBook Details: "+"\n"
-		+"Name: "+this.getAddressBookName()+"\n"
-		+"Total Contacts: "+this.total_contacts+"\n";
+	public String toString() {
+		if(this.addressBook.size() > 0) {
+			StringBuilder contactInfo = new StringBuilder();
+			for(Contact contact: addressBook) {
+				contactInfo=contactInfo.append(contact.toString()).append("\n");
+			}
+			
+			return "\nAddressBook Details: "+"\n"
+			+"Name: "+this.getAddressBookName()+"\n"
+			+"Total Contacts: "+this.total_contacts+"\n"
+			+"Contacts: "+contactInfo;
+		}
+		else {
+			return "\nAddressBook Details: "+"\n"
+					+"Name: "+this.getAddressBookName()+"\n"
+					+"Total Contacts: "+this.total_contacts+"\n";
+		}
 	}
 
 	public int searchPersonCity(String person, String city) {
@@ -250,11 +263,6 @@ public class AddressBookImpl implements AddressBookService{
 		else if(ioservice.equals(IOService.JSON_IO)) {
 			String filename = this.addressBookName+".json";
 			this.addressBook=new AddressBookJSONIO().readAddressBookData(filename);
-			this.total_contacts = this.addressBook.size();
-			return this.addressBook.size();
-		}
-		else if(ioservice.equals(IOService.DB_IO)) {
-			this.addressBook=new AddressBookDBIO().readAddressBookData();
 			this.total_contacts = this.addressBook.size();
 			return this.addressBook.size();
 		}
