@@ -152,4 +152,19 @@ public class SystemDBService {
 		}
 		return contactList;
 	}
+
+	public int insertContact(String first_name, String last_name, String phone, String email) {
+		String sql0 = String.format("INSERT INTO `contact`\n"
+				+ "(`first_name`,`last_name`,`phone_number`,`email`)\n"
+				+ "VALUES ('%s','%s','%s','%s');",first_name,last_name,phone,email);
+		List<AddressBookImpl> addressBookData = new ArrayList<AddressBookImpl>();
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			return statement.executeUpdate(sql0);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }
