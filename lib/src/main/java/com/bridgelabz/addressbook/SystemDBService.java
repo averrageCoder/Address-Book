@@ -67,4 +67,17 @@ public class SystemDBService {
 		}
 		return addressBookData;
 	}
+
+	public int updateEmployeeUsingPreparedStatement(String first_name, String phone_number) {
+		String sql0 = String.format("update contact set phone_number='%s' where first_name='%s'",phone_number,first_name);
+		List<AddressBookImpl> addressBookData = new ArrayList<AddressBookImpl>();
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			return statement.executeUpdate(sql0);
+		}
+		catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
+	}
 }
