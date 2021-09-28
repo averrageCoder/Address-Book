@@ -37,4 +37,10 @@ public class AddressBookTest {
 		int size = systemClass.readAddressBookDataBasedOnCityOrState("London","Delhi");
 		assertEquals(2, size);
 	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_whenAddedShouldMatchDB() {
+		SystemClassIF systemClass = new SystemClassImpl();
+		assertTrue(systemClass.insertToAddressBookData("Mark","Wade","7894561230","m@m.com"));
+	}
 }
