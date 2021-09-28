@@ -1,6 +1,7 @@
 package com.bridgelabz.addressbook;
 
 import java.io.IOException;
+import java.util.function.BooleanSupplier;
 
 import com.bridgelabz.addressbook.AddressBookImpl.IOService;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
@@ -29,4 +30,5 @@ public interface SystemClassIF {
 	public boolean updateAddressBookData(String first_name, String phone_number);
 	public int readAddressBookDataBasedOnDate(String date);
 	public int readAddressBookDataBasedOnCityOrState(String string, String string2);
+	public boolean insertToAddressBookData(String string, String string2, String string3, String string4);
 }

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.function.BooleanSupplier;
 
 import com.bridgelabz.addressbook.AddressBookImpl.IOService;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
@@ -342,5 +343,12 @@ public class SystemClassImpl implements SystemClassIF {
 		List<Contact> contactList = new ArrayList<>();
 		contactList = new SystemDBService().readAddressBookDataBAsedOnCityOrState(city, state);
 		return contactList.size();
+	}
+
+	@Override
+	public boolean insertToAddressBookData(String first_name, String last_name, String phone, String email) {
+		int result = (new SystemDBService()).insertContact(first_name,last_name,phone,email);
+		if (result==0) return false;
+		return true;
 	}
 }
