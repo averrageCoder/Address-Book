@@ -10,16 +10,7 @@ public class Contact {
 	private String lastName;
 	
 	@CsvBindByName(column = "ADDRESS")
-	private String address;
-	
-	@CsvBindByName(column = "CITY")
-	private String city;
-	
-	@CsvBindByName(column = "STATE")
-	private String state;
-	
-	@CsvBindByName(column = "ZIPCODE")
-	private String zipCode;
+	private ContactAddress address;
 	
 	@CsvBindByName(column = "PHONENUMBER")
 	private String phoneNumber;
@@ -27,21 +18,19 @@ public class Contact {
 	@CsvBindByName(column = "EMAIL")
 	private String email;
 	
-	public Contact(String firstName, String lastName, String address, String city, String state, String zipCode,
+	public Contact() {
+		this.address = new ContactAddress();
+	}
+	
+	public Contact(String firstName, String lastName, String city, String state, String zipCode,
 			String phoneNumber, String email) {
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.address = address;
-		this.city = city;
-		this.state = state;
-		this.zipCode = zipCode;
+		this.address = new ContactAddress(city, state, zipCode);
 		this.phoneNumber = phoneNumber;
 		this.email = email;
 	}
-	
-	public Contact() {
-		// TODO Auto-generated constructor stub
-	}
+
 
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
@@ -63,36 +52,36 @@ public class Contact {
 		return this.firstName+" "+this.lastName;
 	}
 	
-	public void setAddress(String address) {
+	public void setAddress(ContactAddress address) {
 		this.address = address;
 	}
 	
-	public String getAddress() {
+	public ContactAddress getAddress() {
 		return this.address;
 	}
 	
 	public void setCity(String city) {
-		this.city = city;
+		this.address.setCity(city);
 	}
 	
 	public String getCity() {
-		return this.city;
+		return this.address.getCity();
 	}
 	
 	public void setState(String state) {
-		this.state=state;
+		this.address.setState(state);
 	}
 	
 	public String getState() {
-		return this.state;
+		return this.address.getState();
 	}
 	
 	public void setZipCode(String zipCode) {
-		this.zipCode = zipCode;
+		this.address.setZipCode(zipCode);
 	}
 	
 	public String getZipCode() {
-		return this.zipCode;
+		return this.address.getZipCode();
 	}
 	
 	public void setPhoneNumber(String phoneNumber) {
@@ -113,8 +102,8 @@ public class Contact {
 
 	@Override
 	public String toString() {
-		return "firstName=" + firstName + ", lastName=" + lastName + ", address=" + address + ", city=" + city
-				+ ", state=" + state + ", zipCode=" + zipCode + ", phoneNumber=" + phoneNumber + ", email=" + email;
+		return "firstName=" + firstName + ", lastName=" + lastName + ", city=" + this.getCity()
+				+ ", state=" + this.getState() + ", zipCode=" + this.getZipCode() + ", phoneNumber=" + phoneNumber + ", email=" + email;
 	}
 	
 	
