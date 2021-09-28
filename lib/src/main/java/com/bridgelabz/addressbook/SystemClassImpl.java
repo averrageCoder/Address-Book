@@ -336,4 +336,11 @@ public class SystemClassImpl implements SystemClassIF {
 		this.addressBooks.forEach(addressBook -> System.out.println(addressBook));
 		return this.total_addressBooks;
 	}
+
+	@Override
+	public int readAddressBookDataBasedOnCityOrState(String city, String state) {
+		List<Contact> contactList = new ArrayList<>();
+		contactList = new SystemDBService().readAddressBookDataBAsedOnCityOrState(city, state);
+		return contactList.size();
+	}
 }

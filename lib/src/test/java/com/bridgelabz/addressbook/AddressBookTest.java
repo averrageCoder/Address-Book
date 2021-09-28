@@ -15,7 +15,7 @@ public class AddressBookTest {
 	public void givenEmployeePayrollInDB_whenRetreivedShouldMatchEmployeeCount() {
 		SystemClassIF systemClass = new SystemClassImpl();
 		int size = systemClass.readAddressBookData(IOService.DB_IO);
-		assertEquals(2, 2);
+		assertEquals(2, size);
 	}
 	
 	@Test
@@ -28,6 +28,13 @@ public class AddressBookTest {
 	public void givenEmployeePayrollInDB_whenRetreivedShouldMatchDB() {
 		SystemClassIF systemClass = new SystemClassImpl();
 		int size = systemClass.readAddressBookDataBasedOnDate("2019-01-01");
-		assertEquals(2, 2);
+		assertEquals(2, size);
+	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_whenRetreivedNumberOfContactsShouldMatchDB() {
+		SystemClassIF systemClass = new SystemClassImpl();
+		int size = systemClass.readAddressBookDataBasedOnCityOrState("London","Delhi");
+		assertEquals(2, size);
 	}
 }

@@ -126,4 +126,30 @@ public class SystemDBService {
 		}
 		return addressBookData;
 	}
+
+	public List<Contact> readAddressBookDataBAsedOnCityOrState(String City, String State) {
+		String sql0 = "select * from address_book;";
+		List<Contact> contactList = new ArrayList<Contact>();
+		try (Connection connection = this.getConnection()) {
+			Statement statement = connection.createStatement();
+			String sql2=String.format("select c.*, ca.* "
+					+ "from contact c inner join contact_address ca on ca.contact_id=c.id "
+					+ "where ca.city='%s' or ca.state='%s'", City, State);
+			ResultSet resultSet3 = statement.executeQuery(sql2);
+			while(resultSet3.next()) {
+				String first_name = resultSet3.getString("first_name");
+				String last_name = resultSet3.getString("last_name");
+				String phone_number = resultSet3.getString("phone_number");
+				String email = resultSet3.getString("email");
+				String city = resultSet3.getString("city");
+				String state = resultSet3.getString("state");
+				String zip = resultSet3.getString("zip");
+				contactList.add(new Contact(first_name, last_name, city, state, zip, phone_number, email));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return contactList;
+	}
 }

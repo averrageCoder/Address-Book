@@ -28,4 +28,5 @@ public interface SystemClassIF {
 	public long readAddressBookDataInAddressBook(String addressBookName, IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException;
 	public boolean updateAddressBookData(String first_name, String phone_number);
 	public int readAddressBookDataBasedOnDate(String date);
+	public int readAddressBookDataBasedOnCityOrState(String string, String string2);
 }
