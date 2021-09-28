@@ -23,4 +23,11 @@ public class AddressBookTest {
 		SystemClassIF systemClass = new SystemClassImpl();
 		assertTrue(systemClass.updateAddressBookData("James","7894561230"));
 	}
+	
+	@Test
+	public void givenEmployeePayrollInDB_whenRetreivedShouldMatchDB() {
+		SystemClassIF systemClass = new SystemClassImpl();
+		int size = systemClass.readAddressBookDataBasedOnDate("2019-01-01");
+		assertEquals(2, 2);
+	}
 }

@@ -327,4 +327,13 @@ public class SystemClassImpl implements SystemClassIF {
 		if (result==0) return false;
 		return true;
 	}
+
+	@Override
+	public int readAddressBookDataBasedOnDate(String date) {
+		this.addressBooks =new SystemDBService().readAddressBookDataBAsedOnDate(date);
+		this.total_addressBooks = this.addressBooks.size();
+		System.out.println("PARSED DATA FROM DB: ");
+		this.addressBooks.forEach(addressBook -> System.out.println(addressBook));
+		return this.total_addressBooks;
+	}
 }
