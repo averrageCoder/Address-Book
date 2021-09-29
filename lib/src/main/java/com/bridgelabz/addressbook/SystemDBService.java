@@ -26,43 +26,54 @@ public class SystemDBService {
 		String sql0 = "select * from address_book;";
 		List<AddressBookImpl> addressBookData = new ArrayList<AddressBookImpl>();
 		try (Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sql0);
-			while(resultSet.next()) {
-				String name = resultSet.getString("name");
-				AddressBookImpl tempAddressBook = new AddressBookImpl();
-				tempAddressBook.setAddressBookName(name);
-				String sql1=String.format("SELECT abc.contact_id "
-						+ "FROM address_book_contact_mapping abc, address_book ab "
-						+ "where ab.id=abc.address_book_id and ab.name='%s';", name);
-				statement = connection.createStatement();
-				ResultSet resultSet2 = statement.executeQuery(sql1);
-				List<Integer> contact_ids= new ArrayList<Integer>();
-				while(resultSet2.next()) {
-					contact_ids.add(resultSet2.getInt("contact_id"));
-				}
-				for(int contact_id: contact_ids) {
-					String sql2=String.format("select c.*, ca.* "
-							+ "from contact c inner join contact_address ca on ca.contact_id=c.id "
-							+ "where c.id=%s;", contact_id);
+			try {
+				connection.setAutoCommit(false);
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(sql0);
+				while(resultSet.next()) {
+					String name = resultSet.getString("name");
+					AddressBookImpl tempAddressBook = new AddressBookImpl();
+					tempAddressBook.setAddressBookName(name);
+					String sql1=String.format("SELECT abc.contact_id "
+							+ "FROM address_book_contact_mapping abc, address_book ab "
+							+ "where ab.id=abc.address_book_id and ab.name='%s';", name);
 					statement = connection.createStatement();
-					ResultSet resultSet3 = statement.executeQuery(sql2);
-					while(resultSet3.next()) {
-						String first_name = resultSet3.getString("first_name");
-						String last_name = resultSet3.getString("last_name");
-						String phone_number = resultSet3.getString("phone_number");
-						String email = resultSet3.getString("email");
-						String city = resultSet3.getString("city");
-						String state = resultSet3.getString("state");
-						String zip = resultSet3.getString("zip");
-						tempAddressBook.addContact(new Contact(first_name, last_name, city, state, zip, phone_number, email));
+					ResultSet resultSet2 = statement.executeQuery(sql1);
+					List<Integer> contact_ids= new ArrayList<Integer>();
+					while(resultSet2.next()) {
+						contact_ids.add(resultSet2.getInt("contact_id"));
 					}
+					for(int contact_id: contact_ids) {
+						String sql2=String.format("select c.*, ca.* "
+								+ "from contact c inner join contact_address ca on ca.contact_id=c.id "
+								+ "where c.id=%s;", contact_id);
+						statement = connection.createStatement();
+						ResultSet resultSet3 = statement.executeQuery(sql2);
+						while(resultSet3.next()) {
+							String first_name = resultSet3.getString("first_name");
+							String last_name = resultSet3.getString("last_name");
+							String phone_number = resultSet3.getString("phone_number");
+							String email = resultSet3.getString("email");
+							String city = resultSet3.getString("city");
+							String state = resultSet3.getString("state");
+							String zip = resultSet3.getString("zip");
+							tempAddressBook.addContact(new Contact(first_name, last_name, city, state, zip, phone_number, email));
+						}
+					}
+					addressBookData.add(tempAddressBook);
 				}
-				addressBookData.add(tempAddressBook);
+				
+			} catch (SQLException e) {
+				connection.rollback();
+				e.printStackTrace();
 			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			finally {
+				if(connection!=null) {
+					connection.close();
+				}
+			}
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return addressBookData;
@@ -85,43 +96,52 @@ public class SystemDBService {
 		String sql0 = "select * from address_book;";
 		List<AddressBookImpl> addressBookData = new ArrayList<AddressBookImpl>();
 		try (Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			ResultSet resultSet = statement.executeQuery(sql0);
-			while(resultSet.next()) {
-				String name = resultSet.getString("name");
-				AddressBookImpl tempAddressBook = new AddressBookImpl();
-				tempAddressBook.setAddressBookName(name);
-				String sql1=String.format("SELECT abc.contact_id "
-						+ "FROM address_book_contact_mapping abc, address_book ab "
-						+ "where ab.id=abc.address_book_id and ab.name='%s';", name);
-				statement = connection.createStatement();
-				ResultSet resultSet2 = statement.executeQuery(sql1);
-				List<Integer> contact_ids= new ArrayList<Integer>();
-				while(resultSet2.next()) {
-					contact_ids.add(resultSet2.getInt("contact_id"));
-				}
-				for(int contact_id: contact_ids) {
-					String sql2=String.format("select c.*, ca.* "
-							+ "from contact c inner join contact_address ca on ca.contact_id=c.id "
-							+ "where c.id=%s and c.date_added between CAST('%s' as date) and date(now());", contact_id, date);
+			try {
+				connection.setAutoCommit(false);
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery(sql0);
+				while(resultSet.next()) {
+					String name = resultSet.getString("name");
+					AddressBookImpl tempAddressBook = new AddressBookImpl();
+					tempAddressBook.setAddressBookName(name);
+					String sql1=String.format("SELECT abc.contact_id "
+							+ "FROM address_book_contact_mapping abc, address_book ab "
+							+ "where ab.id=abc.address_book_id and ab.name='%s';", name);
 					statement = connection.createStatement();
-					ResultSet resultSet3 = statement.executeQuery(sql2);
-					while(resultSet3.next()) {
-						String first_name = resultSet3.getString("first_name");
-						String last_name = resultSet3.getString("last_name");
-						String phone_number = resultSet3.getString("phone_number");
-						String email = resultSet3.getString("email");
-						String city = resultSet3.getString("city");
-						String state = resultSet3.getString("state");
-						String zip = resultSet3.getString("zip");
-						tempAddressBook.addContact(new Contact(first_name, last_name, city, state, zip, phone_number, email));
+					ResultSet resultSet2 = statement.executeQuery(sql1);
+					List<Integer> contact_ids= new ArrayList<Integer>();
+					while(resultSet2.next()) {
+						contact_ids.add(resultSet2.getInt("contact_id"));
 					}
+					for(int contact_id: contact_ids) {
+						String sql2=String.format("select c.*, ca.* "
+								+ "from contact c inner join contact_address ca on ca.contact_id=c.id "
+								+ "where c.id=%s and c.date_added between CAST('%s' as date) and date(now());", contact_id, date);
+						statement = connection.createStatement();
+						ResultSet resultSet3 = statement.executeQuery(sql2);
+						while(resultSet3.next()) {
+							String first_name = resultSet3.getString("first_name");
+							String last_name = resultSet3.getString("last_name");
+							String phone_number = resultSet3.getString("phone_number");
+							String email = resultSet3.getString("email");
+							String city = resultSet3.getString("city");
+							String state = resultSet3.getString("state");
+							String zip = resultSet3.getString("zip");
+							tempAddressBook.addContact(new Contact(first_name, last_name, city, state, zip, phone_number, email));
+						}
+					}
+					addressBookData.add(tempAddressBook);
 				}
-				addressBookData.add(tempAddressBook);
+				
+			} catch (SQLException e) {
+				connection.rollback();
+				e.printStackTrace();
 			}
-			
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			finally {
+				connection.close();
+			}
+		}
+		catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return addressBookData;
@@ -130,25 +150,37 @@ public class SystemDBService {
 	public List<Contact> readAddressBookDataBAsedOnCityOrState(String City, String State) {
 		String sql0 = "select * from address_book;";
 		List<Contact> contactList = new ArrayList<Contact>();
-		try (Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			String sql2=String.format("select c.*, ca.* "
-					+ "from contact c inner join contact_address ca on ca.contact_id=c.id "
-					+ "where ca.city='%s' or ca.state='%s'", City, State);
-			ResultSet resultSet3 = statement.executeQuery(sql2);
-			while(resultSet3.next()) {
-				String first_name = resultSet3.getString("first_name");
-				String last_name = resultSet3.getString("last_name");
-				String phone_number = resultSet3.getString("phone_number");
-				String email = resultSet3.getString("email");
-				String city = resultSet3.getString("city");
-				String state = resultSet3.getString("state");
-				String zip = resultSet3.getString("zip");
-				contactList.add(new Contact(first_name, last_name, city, state, zip, phone_number, email));
+		Connection connection;
+		try {
+			connection = this.getConnection();
+			try {
+				connection.setAutoCommit(false);
+				Statement statement = connection.createStatement();
+				String sql2=String.format("select c.*, ca.* "
+						+ "from contact c inner join contact_address ca on ca.contact_id=c.id "
+						+ "where ca.city='%s' or ca.state='%s'", City, State);
+				ResultSet resultSet3 = statement.executeQuery(sql2);
+				while(resultSet3.next()) {
+					String first_name = resultSet3.getString("first_name");
+					String last_name = resultSet3.getString("last_name");
+					String phone_number = resultSet3.getString("phone_number");
+					String email = resultSet3.getString("email");
+					String city = resultSet3.getString("city");
+					String state = resultSet3.getString("state");
+					String zip = resultSet3.getString("zip");
+					contactList.add(new Contact(first_name, last_name, city, state, zip, phone_number, email));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				connection.rollback();
 			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			finally {
+				if(connection!=null) {
+					connection.close();
+				}
+			}
+		} catch (SQLException e1) {
+			e1.printStackTrace();
 		}
 		return contactList;
 	}
