@@ -64,7 +64,7 @@ public class SystemClassImpl implements SystemClassIF {
 		}
 	}
 
-	public void editAddressBook(String addressBookName) {
+	public void editAddressBook(String addressBookName, String AddressBookType) {
 		if(total_addressBooks < 1) {
 			System.out.println("No contacts in addressbook!");
 			return;
@@ -75,7 +75,7 @@ public class SystemClassImpl implements SystemClassIF {
 			tempAddressBook=addressBooks.get(i);
 			if(addressBookName.equals(tempAddressBook.getAddressBookName())) {
 				System.out.println("AddressBook found! Enter new details: ");
-				AddressBookImpl addressBook = createNewAddressBook(addressBookName);
+				AddressBookImpl addressBook = createNewAddressBook(addressBookName, AddressBookType);
 				addressBooks.set(i,addressBook);
 				System.out.println("AddressBook edited successfully!");
 				flag=0;
@@ -87,9 +87,8 @@ public class SystemClassImpl implements SystemClassIF {
 		System.out.flush();
 	}
 
-	public AddressBookImpl createNewAddressBook(String addressBookName) {
-		AddressBookImpl addressBook =new AddressBookImpl();
-		addressBook.setAddressBookName(addressBookName);
+	public AddressBookImpl createNewAddressBook(String addressBookName, String addressBookType) {
+		AddressBookImpl addressBook =new AddressBookImpl(addressBookName, addressBookType);
 		System.out.println(addressBook);
 		return addressBook;
 	}
@@ -129,8 +128,7 @@ public class SystemClassImpl implements SystemClassIF {
 		System.out.flush();
 	}
 	
-	public void addAddressBook(String addressBookName) {
-		AddressBookImpl addressBook = createNewAddressBook(addressBookName);
+	public void addAddressBook(AddressBookImpl addressBook) {
 		addressBooks.add(addressBook);
 		total_addressBooks++;
 	}
@@ -346,9 +344,43 @@ public class SystemClassImpl implements SystemClassIF {
 	}
 
 	@Override
-	public boolean insertToAddressBookData(String first_name, String last_name, String phone, String email) {
-		int result = (new SystemDBService()).insertContact(first_name,last_name,phone,email);
+	public boolean insertToAddressBookData(String first_name, String last_name, String phone, String email, String city, String state, int zipCode) {
+		int result = (new SystemDBService()).insertContact(first_name,last_name,phone,email, city, state, zipCode);
 		if (result==0) return false;
 		return true;
+	}
+
+	@Override
+	public boolean checkInSyncWithDB(String first_name) {
+		List<Contact> contactList = new ArrayList<>();
+		contactList = new SystemDBService().readAllContactsFromDB();
+		Contact expectedContact = new SystemDBService().readContactBasedOnName(first_name);
+		return expectedContact.equals(getContactBasedOnName(contactList, first_name));
+	}
+
+	private Contact getContactBasedOnName(List<Contact> contactList, String first_name) {
+		return contactList.stream()
+				.filter(employeePayrollDataItem -> employeePayrollDataItem.getFirstName().equals(first_name))
+				.findFirst()
+				.orElse(null);
+	}
+
+	@Override
+	public void writeSystem(IOService ioservice) {
+		if(ioservice.equals(IOService.JSON_IO)) {
+			String filename = "system.json";
+			new SystemJSONService().writeData(this.addressBooks, filename);
+		}
+	}
+
+	@Override
+	public void readSystem(IOService ioservice) {
+		if(ioservice.equals(IOService.JSON_IO)) {
+			String filename = "system.json";
+			this.addressBooks = new SystemJSONService().readAddressBookData(filename);
+			for(AddressBookImpl addressBook: this.addressBooks) {
+				System.out.println(addressBook);
+			}
+		}
 	}
 }
