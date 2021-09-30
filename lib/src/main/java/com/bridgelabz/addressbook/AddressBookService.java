@@ -1,6 +1,7 @@
 package com.bridgelabz.addressbook;
 
 import java.io.IOException;
+import java.util.List;
 
 import com.bridgelabz.addressbook.AddressBookImpl.IOService;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
@@ -24,4 +25,7 @@ public interface AddressBookService {
 	public void sortAddressBookByZip();
 	void writeAddressBookData(IOService ioservice) throws CsvDataTypeMismatchException, CsvRequiredFieldEmptyException, IOException;
 	public long readAddressBookData(IOService ioservice);
+	public void setAddressBookType(String string);
+	public int getTotalContacts();
+	public List<Contact> getContacts();
 }

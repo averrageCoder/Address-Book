@@ -24,21 +24,39 @@ public class AddressBookImpl implements AddressBookService{
 	private HashMap<String,ArrayList<Contact>> cityPersonMapping=new HashMap<>();
 	private HashMap<String,ArrayList<Contact>> statePersonMapping=new HashMap<>();
 	int total_contacts=0;
+	private String addressBookType;
 	
-	public AddressBookImpl(String name) {
+	public AddressBookImpl(String name, String type) {
 		this.addressBookName = name;
+		this.addressBookType = type;
 	}
 
 	public AddressBookImpl() {
 		// TODO Auto-generated constructor stub
 	}
-
+	
+	public List<Contact> getContacts() {
+		return this.addressBook;
+	}
+	
 	public void setAddressBookName(String addressBookName) {
 		this.addressBookName = addressBookName;
 	}
 	
+	public void setAddressBookType(String addressBookType) {
+		this.addressBookType = addressBookType;
+	}
+	
 	public String getAddressBookName() {
 		return this.addressBookName;
+	}
+	
+	public String getAddressBookType() {
+		return this.addressBookType;
+	}
+	
+	public int getTotalContacts() {
+		return this.addressBook.size();
 	}
 
 	public void deleteContact(String name) {;
@@ -75,17 +93,18 @@ public class AddressBookImpl implements AddressBookService{
 		for (int i = 0; i < addressBook.size(); i++) {
 			tempContact=addressBook.get(i);
 			if(name.equals(tempContact.getName())) {
+				flag=0;
 				System.out.println("Name found! Enter new details: ");
+				nameSet.remove(tempContact.getName());
 				contact = checkNewContact(contact);
 				if(contact==null) {
+					nameSet.add(tempContact.getName());
 					System.out.println("Name already exists!");
 				}
 				else {
 					addressBook.set(i, contact);
-					nameSet.remove(tempContact.getName());
 					sortAddressBookByName();
 					System.out.println("Contact added successfully!");
-					flag=0;
 					break;
 				}
 			}
@@ -107,7 +126,7 @@ public class AddressBookImpl implements AddressBookService{
 		}
 
 	public Contact checkNewContact(Contact contact) {
-		if(!nameSet.add(contact.getFirstName()+' '+contact.getLastName()))
+		if(!nameSet.add(contact.getName()))
 			return null;
 		
 		if(this.cityPersonMapping.containsKey(contact.getCity())) {
@@ -145,12 +164,14 @@ public class AddressBookImpl implements AddressBookService{
 			
 			return "\nAddressBook Details: "+"\n"
 			+"Name: "+this.getAddressBookName()+"\n"
+			+"Type: "+this.getAddressBookType()+"\n"
 			+"Total Contacts: "+this.total_contacts+"\n"
 			+"Contacts: "+contactInfo;
 		}
 		else {
 			return "\nAddressBook Details: "+"\n"
 					+"Name: "+this.getAddressBookName()+"\n"
+					+"Type: "+this.getAddressBookType()+"\n"
 					+"Total Contacts: "+this.total_contacts+"\n";
 		}
 	}
