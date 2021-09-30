@@ -53,11 +53,11 @@ public class AddressBookCSVIO {
 					tempContact.setFirstName( record[0]);
 					tempContact.setLastName(record[1]);
 					//tempContact.setAddress(record[2]);
-					tempContact.setCity(record[3]);
-					tempContact.setState(record[4]);
-					tempContact.setZipCode(record[5]);
-					tempContact.setPhoneNumber(record[6]);
-					tempContact.setEmail(record[7]);
+					tempContact.setCity(record[2]);
+					tempContact.setState(record[3]);
+					tempContact.setZipCode(record[4]);
+					tempContact.setPhoneNumber(record[5]);
+					tempContact.setEmail(record[6]);
 					addressBookData.add(tempContact);
 			}
 		}
