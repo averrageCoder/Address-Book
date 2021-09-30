@@ -37,11 +37,11 @@ public class AddressBookFileIO {
 							tempAddressBook.setFirstName(line.split(",")[0].split("=")[1]);
 							tempAddressBook.setLastName(line.split(",")[1].split("=")[1]);
 							//tempAddressBook.setAddress(line.split(",")[2].split("=")[1]);
-							tempAddressBook.setCity(line.split(",")[3].split("=")[1]);
-							tempAddressBook.setState(line.split(",")[4].split("=")[1]);
-							tempAddressBook.setZipCode(line.split(",")[5].split("=")[1]);
-							tempAddressBook.setPhoneNumber(line.split(",")[6].split("=")[1]);
-							tempAddressBook.setEmail(line.split(",",8)[7].split("=")[1]);
+							tempAddressBook.setCity(line.split(",")[2].split("=")[1]);
+							tempAddressBook.setState(line.split(",")[3].split("=")[1]);
+							tempAddressBook.setZipCode(line.split(",")[4].split("=")[1]);
+							tempAddressBook.setPhoneNumber(line.split(",")[5].split("=")[1]);
+							tempAddressBook.setEmail(line.split(",",7)[6].split("=")[1]);
 							 //Integer.parseInt(line.split(",")[0].split("=")[1]), line.split(",")[1].split("=")[1], Double.parseDouble(line.split(",")[2].split("=")[1])
 							addressBookData.add(tempAddressBook);
 							System.out.println(tempAddressBook);
