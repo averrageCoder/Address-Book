@@ -1,9 +1,23 @@
 package com.bridgelabz.addressbook;
 
+import java.util.Objects;
+
 import com.opencsv.bean.CsvBindByName;
 
 public class ContactAddress {
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ContactAddress other = (ContactAddress) obj;
+		return Objects.equals(city, other.city) && Objects.equals(state, other.state)
+				&& Objects.equals(zipCode, other.zipCode);
+	}
 	@CsvBindByName(column = "CITY")
 	private String city;
 	
