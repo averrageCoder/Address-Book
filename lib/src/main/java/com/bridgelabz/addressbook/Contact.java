@@ -11,7 +11,6 @@ public class Contact {
 	@CsvBindByName(column = "LASTNAME")
 	private String lastName;
 	
-	@CsvBindByName(column = "ADDRESS")
 	private ContactAddress address;
 	
 	@CsvBindByName(column = "PHONENUMBER")
