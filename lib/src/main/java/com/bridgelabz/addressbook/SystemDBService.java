@@ -2,6 +2,7 @@ package com.bridgelabz.addressbook;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,6 +23,19 @@ public class SystemDBService {
 		connection = DriverManager.getConnection(jdbcUrl, userName, password);
 		System.out.println("Connection is successful!!!"+connection);
 		return connection;
+	}
+	
+	private PreparedStatement prepareStatementForSQL(String sql) throws AddressBookExceptions {
+		PreparedStatement preparedStatement;
+		try {
+			Connection connection = this.getConnection();
+			preparedStatement = connection.prepareStatement(sql);
+		}
+		catch(SQLException e) {
+			throw new AddressBookExceptions(ExceptionType.SQL_ERROR, "SQL ERROR!");
+		}
+		return preparedStatement;
+		
 	}
 	
 	public List<Contact> getContactListFromResultSet(ResultSet resultSet) throws SQLException {
@@ -94,7 +108,6 @@ public class SystemDBService {
 
 	public int updateEmployeeUsingPreparedStatement(String first_name, String phone_number) {
 		String sql0 = String.format("update contact set phone_number='%s' where first_name='%s'",phone_number,first_name);
-		List<AddressBookImpl> addressBookData = new ArrayList<AddressBookImpl>();
 		try (Connection connection = this.getConnection()) {
 			Statement statement = connection.createStatement();
 			return statement.executeUpdate(sql0);
@@ -185,23 +198,43 @@ public class SystemDBService {
 		return contactList;
 	}
 
-	public int insertContact(String first_name, String last_name, String phone, String email, String city, String state, int zipCode) {
+	public int insertContact(Contact contact) {
+		String first_name = contact.getFirstName(); 
+		String last_name = contact.getLastName(); 
+		String phone = contact.getPhoneNumber();
+		String email = contact.getEmail();
+		String city = contact.getCity();
+		String state = contact.getState();
+		int zipCode = Integer.parseInt(contact.getZipCode());
 		int contactID=-1;
-		String sql0 = String.format("INSERT INTO `contact`\n"
-				+ "(`first_name`,`last_name`,`phone_number`,`email`)\n"
-				+ "VALUES ('%s','%s','%s','%s');",first_name,last_name,phone,email);
-		List<AddressBookImpl> addressBookData = new ArrayList<AddressBookImpl>();
-		try (Connection connection = this.getConnection()) {
-			Statement statement = connection.createStatement();
-			int rowAffected = statement.executeUpdate(sql0, statement.RETURN_GENERATED_KEYS);
-			if(rowAffected==1) {
-				ResultSet resultSet = statement.getGeneratedKeys();
-				if(resultSet.next()) contactID = resultSet.getInt(1);
-				String sql = String.format("INSERT INTO `addressBook_system`.`contact_address`\n"
-						+ "(`contact_id`,`city`,`state`,`zip`)\n"
-						+ "VALUES (%s,'%s','%s',%s)", contactID, city, state, zipCode);
-				statement = connection.createStatement();
-				return statement.executeUpdate(sql);
+		PreparedStatement preparedStatement;
+		String sql0 = "INSERT INTO `contact` (`first_name`,`last_name`,`phone_number`,`email`) VALUES (?,?,?,?);";
+		try {
+			Connection connection = this.getConnection();
+			try {
+				connection.setAutoCommit(false);
+				preparedStatement = prepareStatementForSQL(sql0);
+				preparedStatement.setString(1, first_name);
+				preparedStatement.setString(2, last_name);
+				preparedStatement.setString(3, phone);
+				preparedStatement.setString(4, email);
+				int rowAffected = preparedStatement.executeUpdate(sql0, preparedStatement.RETURN_GENERATED_KEYS);
+				if(rowAffected==1) {
+					ResultSet resultSet = preparedStatement.getGeneratedKeys();
+					if(resultSet.next()) contactID = resultSet.getInt(1);
+					String sql1 = "INSERT INTO `contact_address` (`contact_id`,`city`,`state`,`zip`) VALUES (?,?,?,?)";
+					preparedStatement = prepareStatementForSQL(sql1);
+					preparedStatement.setInt(1, contactID);
+					preparedStatement.setString(2, city);
+					preparedStatement.setString(3, state);
+					preparedStatement.setInt(4, zipCode);
+					return preparedStatement.executeUpdate();
+				}
+			}
+			catch (SQLException e) {
+				e.printStackTrace();
+				connection.rollback();
+				throw new AddressBookExceptions(ExceptionType.SQL_ERROR, "SQL ERROR!");
 			}
 		}
 		catch (SQLException e) {
