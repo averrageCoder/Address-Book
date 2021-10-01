@@ -32,6 +32,6 @@ public interface SystemClassIF {
 	public boolean updateAddressBookData(String first_name, String phone_number);
 	public int readAddressBookDataBasedOnDate(String date);
 	public int readAddressBookDataBasedOnCityOrState(String string, String string2);
-	public boolean insertToAddressBookData(String first_name, String last_name, String phone, String email, String city, String state, int zipCode);
 	public boolean checkInSyncWithDB(String string);
+	public boolean insertToAddressBookData(Contact contact);
 }

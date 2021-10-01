@@ -344,8 +344,8 @@ public class SystemClassImpl implements SystemClassIF {
 	}
 
 	@Override
-	public boolean insertToAddressBookData(String first_name, String last_name, String phone, String email, String city, String state, int zipCode) {
-		int result = (new SystemDBService()).insertContact(first_name,last_name,phone,email, city, state, zipCode);
+	public boolean insertToAddressBookData(Contact contact) {
+		int result = (new SystemDBService()).insertContact(contact);
 		if (result==0) return false;
 		return true;
 	}
