@@ -11,17 +11,17 @@ public class MainClass {
 	public static void main(String[] args) {
 		System.out.println("=== Welcome to address boom program ===");
 		
-		addContactToAddressBook();
-		editContactInAddressBook();
-		deleteContactInAddressBook();
-		writeAddressBookToFile();
-		readAddressBookFromFile();
+//		addContactToAddressBook();
+//		editContactInAddressBook();
+//		deleteContactInAddressBook();
+//		writeAddressBookToFile();
+//		readAddressBookFromFile();
 		writeAddressBookToCsv();
-		readAddressBookFromCSV();
-		writeAddressBookToJSON();
-		readAddressBookFromJSON();
-		writeSystemToJson();
-		readSystemFromJSON();
+//		readAddressBookFromCSV();
+//		writeAddressBookToJSON();
+//		readAddressBookFromJSON();
+//		writeSystemToJson();
+//		readSystemFromJSON();
 	}
 
 	private static void deleteContactInAddressBook() {
@@ -119,7 +119,7 @@ public class MainClass {
 		addressBook.setAddressBookType("Friends");
 		addressBook.addContact(new Contact("jack","jones","city","state","860080","7891234567","j@j.com"));
 		addressBook.addContact(new Contact("mad","man","city","state","860080","7891234567","j@j.com"));
-		SystemClassIF systemClass = new SystemClassImpl();
+		AddressBookManagerIF systemClass = new AddressBookManagerImpl();
 		systemClass.addAddressBook(addressBook);
 		systemClass.addAddressBook(addressBook2);
 		
@@ -131,7 +131,7 @@ public class MainClass {
 	}
 	
 	private static void readSystemFromJSON() {
-		SystemClassIF systemClass = new SystemClassImpl();
+		AddressBookManagerIF systemClass = new AddressBookManagerImpl();
 		systemClass.readSystem(IOService.JSON_IO);
 	}
 }
