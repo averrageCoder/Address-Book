@@ -1,14 +1,15 @@
 package com.bridgelabz.addressbook;
 
 import java.io.IOException;
-import java.util.function.BooleanSupplier;
+import java.util.List;
 
 import com.bridgelabz.addressbook.AddressBookImpl.IOService;
 import com.opencsv.exceptions.CsvDataTypeMismatchException;
 import com.opencsv.exceptions.CsvRequiredFieldEmptyException;
 
 public interface AddressBookManagerIF {
-
+	
+	public List<AddressBookImpl> getAllAddressBooks() ;
 	public void getCityAndStateCount(String city, String state);
 	public void viewPersonCityState(String city, String state);
 	public void searchPersonCity(String city, String person);

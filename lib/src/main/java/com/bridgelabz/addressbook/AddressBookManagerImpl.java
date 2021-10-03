@@ -15,6 +15,10 @@ public class AddressBookManagerImpl implements AddressBookManagerIF {
 	static List<AddressBookImpl> addressBooks = new ArrayList<AddressBookImpl>();
 	static int total_addressBooks=0;
 	
+	public List<AddressBookImpl> getAllAddressBooks() {
+		return this.addressBooks;
+	}
+	
 	public void getCityAndStateCount(String city, String state) {	
 		if(total_addressBooks < 1) {
 			System.out.println("No contacts in addressbook!");
